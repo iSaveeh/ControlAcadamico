@@ -1,6 +1,6 @@
 <?php
 // Configuración de la base de datos
-$DbName = 'ControlAcadamico';
+$DbName = 'focusgrade';
 $DbUser = 'root';
 $DbPassword = '';
 $DbHost = 'localhost';

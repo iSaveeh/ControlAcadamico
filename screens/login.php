@@ -5,7 +5,7 @@
 
   <title>Login</title>
 
-  <link rel="stylesheet" href="../css/login.css"> <!-- Conexion de css -->
+  <link rel="stylesheet" href="../css/style.css"> <!-- Conexion de css -->
 
    <!-- Conexión previa a Google Fonts (mejora rendimiento) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,6 @@
   <div class="contenedor-login">
     <div class="login-box">
       <img src="../images/LogoColegio.png" alt="Escudo" class="logo">
-      <h2>PSICO PEDAGÓGICO<br><span>DUVER FREUD</span></h2>
 
       <div class="botones">
         <form action="admin.php" method="post">

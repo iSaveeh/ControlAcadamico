@@ -1,0 +1,171 @@
+/* Reset general */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Contenedor general */
+.contenedor-navbar {
+    width: 100%;
+    background-color: #587DA3;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+/* Barra de navegación principal */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 15px;
+    height: 60px;
+    background-color: #587DA3;
+    color: black;
+}
+
+/* Logo y texto */
+.logo-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Logo Colegio */
+.logo {
+    height: 70px;
+    width: auto;
+    cursor: pointer;
+}
+
+/* === Titulo Superior e Inferior === */
+.titulo .superior {
+    font-style: oblique;
+    font-weight: 100;
+    color: white;
+    text-shadow: 5px 10px 20px rgba(0, 0, 0, 0.5);
+}
+.titulo .inferior {
+    font-weight: bold;
+    font-style: italic;
+    color: white;
+    text-shadow: 2px 10px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Separador */
+.separador {
+    width: 2px;
+    height: 40px;
+    background-color: white;
+    opacity: 0.4;
+    border-radius: 2px;
+}
+
+/* ===== Contenedor de botones ===== */
+.navbar-botones {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* ===== Botón general de navbar ===== */
+.btn-navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px 10px;
+    gap: 6px;
+    height: 100%;
+    transition: background-color 0.2s ease;
+}
+
+.btn-navbar:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+/* Iconos dentro de los botones */
+.icono-navbar {
+    width: 45px;
+    height: 45px;
+    pointer-events: none;
+}
+
+/* Texto dentro de los botones */
+.texto-navbar {
+    font-size: 17px;
+    font-weight: 500;
+    color: black;
+    pointer-events: none;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Estilo específico para el texto de perfil */
+.texto-navbar.perfil {
+    font-style: oblique;
+    line-height: 1;
+    border-bottom: 2px solid black;
+    padding-bottom: 2px;
+}
+
+
+
+/* ===== Contenido principal Login ===== */
+
+
+
+/* ===== Contenido principal Menu ===== */
+.contenido {
+    padding: 20px;
+}
+
+
+
+
+
+
+
+
+
+/* ===== Responsividad básica ===== */
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        gap: 10px;
+    }
+
+    .navbar-botones {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .logo-text {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .btn-navbar {
+        flex-direction: row;
+    }
+
+    .icono-navbar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .texto-navbar {
+        font-size: 15px;
+    }
+
+    .texto-navbar.perfil {
+        border-bottom: none;
+    }
+}

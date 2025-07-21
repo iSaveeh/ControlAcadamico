@@ -39,12 +39,11 @@ body {
 .login-box h2 {
   font-size: 22px;
   margin-bottom: 20px;
-  color: #1e1e1e;
+  color: #ca1010;
 }
 
 .login-box h2 span {
   font-size: 18px;
-  color: #444;
 }
 
 .botones {
