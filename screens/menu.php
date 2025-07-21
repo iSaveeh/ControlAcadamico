@@ -38,7 +38,8 @@
     </div>
 
     <!-- Bloque derecha: Botón cerrar sesión -->
-    <div class="acciones-navbar" style="display: flex; align-items: center; gap: 20px;">
+    <div class="acciones-navbar" 
+    style="display: flex; align-items: center; gap: 20px;">
 
         <!-- Línea separadora -->
         <div class="separador"></div>

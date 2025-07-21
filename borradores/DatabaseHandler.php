@@ -4,7 +4,7 @@ $DbName = 'ControlAcadamico';
 $DbUser = 'root';
 $DbPassword = '';
 $DbHost = 'localhost';
-$tables = array('Usuarios','Acudientes','Administrador','Inscripciones', 'calificaciones','Profesores', 'Asignaturas', 'Salon', 'Observador','Horarios','Boletin','Matricula',);
+$tables = array('usuarios','salon','profesor','observador', 'matricula','horario', 'estudiante', 'calificaciones', 'boletin','asignaturas','administrador','acudiente', 'actividades');
 
 // Función para obtener la conexión
 function getConnection() {
