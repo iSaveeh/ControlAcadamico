@@ -1,54 +1,86 @@
-/* Estilo para el contenedor principal del contenido */
+/* Contenedor principal */
 .contenido-principal {
-    margin-left: 320px; /* Igual al ancho del menú lateral */
+    margin-left: 320px;
     padding: 20px;
-    background-color: #e9eef2;
+    background: #e9eef2;
     min-height: 100vh;
     transition: all 0.3s ease;
 }
 
-/* Cada panel de contenido que se va mostrando dinámicamente */
+/* Paneles dinámicos */
 .panel-contenido {
     display: none;
     animation: fadeIn 0.3s ease-in-out;
 }
-
-/* Cuando el panel está activo (se muestra) */
 .panel-contenido.activo {
     display: block;
 }
 
-/* Botones del submenú */
+/* Submenú */
 .submenu-botones {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
     margin-top: 20px;
 }
-
 .btn-submenu {
     padding: 12px 20px;
-    background-color: #2e6da4;
-    color: white;
+    background: #2e6da4;
+    color: #fff;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.2s ease;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
-
 .btn-submenu:hover {
-    background-color: #204d74;
+    background: #204d74;
 }
 
-/* Animación de entrada */
+/* Grid de botones principales */
+.grid-botones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 150px));
+    gap: 16px;
+    margin-top: 25px;
+
+}
+.menu-boton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    background: #f8f4f2;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.menu-boton:hover {
+    transform: scale(1.05);
+}
+.menu-boton img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 8px;
+}
+.menu-boton span {
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    color: #333;
+}
+.menu-boton.seleccionado {
+    background: radial-gradient(circle, #6186a6 40%, #204d74 100%);
+    box-shadow: 0 0 0 4px #204d7433;
+    color: #fff;
+    /* Opcional: resalta el borde */
+    transition: background 0.3s;
+}
+
+/* Animación */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

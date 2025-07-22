@@ -95,51 +95,108 @@
             </div>
         </div>
     </div>
-
+    
     <!-- PANEL QUE CAMBIA SEGÚN BOTONES -->
     <div class="contenido-principal">
         <div id="panel-menu" class="panel-contenido">
             <h2>Opciones del Menú</h2>
-            <div class="submenu-botones">
-                <button class="btn-submenu">Estudiantes</button>
-                <button class="btn-submenu">Docentes</button>
-                <button class="btn-submenu">Materias</button>
+             
+                 <!-- modulos  con su imagen -->
+
+            <div id="modulos" class="grid-botones">
+                <button class="menu-boton" onclick="cargarContenido('boletin')">
+                    <img src="../imgenes/icons/boletin.png" alt="Boletín"><span>Boletín</span>
+                </button>
+                <button class="menu-boton" onclick="cargarContenido('notas')">
+                    <img src="../images/icons/notas parciales.png" alt="Notas"><span>Notas parciales</span>
+                </button>
+                <button class="menu-boton" onclick="cargarContenido('tareas')">
+                    <img src="../images/icons/tareas actividades.png" alt="Tareas"><span>Tareas y Actividades</span>
+                </button>
+                <button class="menu-boton" onclick="cargarContenido('observador')">
+                    <img src="../images/icons/observador.png" alt="Observador"><span>Observador</span>
+                </button>
+                <button class="menu-boton" onclick="cargarContenido('asistencia')">
+                    <img src="../images/icons/asistencias.png" alt="Asistencia"><span>Asistencia</span>
+                </button>
+                <button class="menu-boton" onclick="cargarContenido('mejoramiento')">
+                    <img src="../images/icons/planes de mejoramiento.png" alt="Planes"><span>Planes de mejoramiento</span>
+                </button>
+                <button class="menu-boton" onclick="cargarContenido('evaluacion')">
+                    <img src="../images/icons/evaluacion institucional.png" alt="Evaluación"><span>Evaluación Institucional</span>
+                </button>
             </div>
+
         </div>
-    </div>
+    
+
+      
 
     <!-- JS -->
     <script>
-        // Modal Cerrar Sesión
-        const btnCerrar = document.getElementById('btnCerrarSesion');
-        const modal = document.getElementById('modalCerrarSesion');
-        const cancelar = document.getElementById('cancelarCerrarSesion');
+    // Modal Cerrar Sesión
+    const btnCerrar = document.getElementById('btnCerrarSesion');
+    const modal = document.getElementById('modalCerrarSesion');
+    const cancelar = document.getElementById('cancelarCerrarSesion');
 
-        btnCerrar.addEventListener('click', () => {
-            modal.style.display = 'flex';
-        });
+    btnCerrar.addEventListener('click', () => {
+        modal.style.display = 'flex';
+    });
 
-        cancelar.addEventListener('click', () => {
+    cancelar.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
             modal.style.display = 'none';
-        });
-
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-
-        // Mostrar panel dinámico
-        function mostrarPanel(id) {
-            document.querySelectorAll('.panel-contenido').forEach(panel => {
-                panel.classList.remove('activo');
-            });
-
-            const panel = document.getElementById(id);
-            if (panel) {
-                panel.classList.add('activo');
-            }
         }
-    </script>
+    });
+
+    // Mostrar panel dinámico
+    function mostrarPanel(id) {
+        document.querySelectorAll('.panel-contenido').forEach(panel => {
+            panel.classList.remove('activo');
+        });
+
+        const panel = document.getElementById(id);
+        if (panel) {
+            panel.classList.add('activo');
+        }
+    }
+
+    // FUNCIONALIDAD: cargar contenido PHP al hacer clic en los botones
+    function cargarContenidoPHP(seccion) {
+        const panel = document.getElementById('contenido-dinamico');
+
+        fetch(`paneles/${seccion}.php`)
+            .then(res => {
+                if (!res.ok) throw new Error("Error al cargar: " + res.statusText);
+                return res.text();
+            })
+            .then(html => {
+                mostrarPanel('contenido-dinamico');
+                panel.innerHTML = html;
+            })
+            .catch(error => {
+                panel.innerHTML = `<p style="color:red;">No se pudo cargar el contenido: ${error.message}</p>`;
+                mostrarPanel('contenido-dinamico');
+            });
+    }
+
+    // Interactividad para sombrear cada botón al seleccionar
+    const gridBotones = document.getElementById('modulos');
+    const botones = gridBotones.querySelectorAll('.menu-boton');
+
+    botones.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Quitar la clase seleccionado de todos los botones
+            botones.forEach(b => b.classList.remove('seleccionado'));
+            // Agregar la clase al botón clickeado
+            btn.classList.add('seleccionado');
+        });
+    });
+</script>
+
 </body>
 </html>
