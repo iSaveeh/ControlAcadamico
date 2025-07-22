@@ -1,0 +1,54 @@
+/* Estilo para el contenedor principal del contenido */
+.contenido-principal {
+    margin-left: 320px; /* Igual al ancho del menú lateral */
+    padding: 20px;
+    background-color: #e9eef2;
+    min-height: 100vh;
+    transition: all 0.3s ease;
+}
+
+/* Cada panel de contenido que se va mostrando dinámicamente */
+.panel-contenido {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Cuando el panel está activo (se muestra) */
+.panel-contenido.activo {
+    display: block;
+}
+
+/* Botones del submenú */
+.submenu-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-submenu {
+    padding: 12px 20px;
+    background-color: #2e6da4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-submenu:hover {
+    background-color: #204d74;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
