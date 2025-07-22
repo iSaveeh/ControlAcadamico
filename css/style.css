@@ -255,3 +255,80 @@ body {
         border-bottom: none;
     }
 }
+
+/* ===== Estilos para el formulario de login y modificacion segun el rol ===== */
+.form-credenciales { 
+  display: none; 
+  margin-top: 20px; 
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+.btn { cursor: pointer; }
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.login-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form-credenciales input, .form-credenciales button {
+  width: 200px;
+  max-width: 90%;
+  transition: background 0.3s, color 0.3s;
+}
+/* Colores por rol y bordes redondeados */
+.form-admin input {
+  background: #e3e7fa;
+  color: #020202;
+  border: 2px solid #4A90E2;
+  border-radius: 10px;
+}
+.form-admin button {
+  background: #4A90E2;
+  color: #000;
+  border: 2px solid #4A90E2;
+  border-radius: 10px;
+}
+
+.form-profe input {
+  background: #e8f5e9;
+  color: #070707;
+  border: 2px solid #C94F4F;
+  border-radius: 10px;
+}
+.form-profe button {
+  background: #C94F4F;
+  color: #000;
+  border: 2px solid #C94F4F;
+  border-radius: 10px;
+}
+
+.form-estudiante input {
+  background: #fffde7;
+  color: #000000;
+  border: 2px solid #F5A623;
+  border-radius: 10px;
+}
+.form-estudiante button {
+  background: #F5A623;
+  color: #000;
+  border: 2px solid #F5A623;
+  border-radius: 10px;
+}
+
+.form-padres input {
+  background: #fce4ec;
+  color: #010101;
+  border: 2px solid #F8E71C;
+  border-radius: 10px;
+}
+.form-padres button {
+  background: #F8E71C;
+  color: #000;
+  border: 2px solid #F8E71C;
+  border-radius: 10px;
+}
