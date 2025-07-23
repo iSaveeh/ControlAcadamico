@@ -40,17 +40,20 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: max-content;
+  width: 100%;           /* Cambiado de max-content a 100% */
   margin: 0 auto;
+  box-sizing: border-box; /* Asegura que padding no desborde */
 }
 
 /* Botones de rol */
 .botones {
   display: flex;
   justify-content: center;
-  gap: 20px;               /* Espaciado uniforme */
-  flex-wrap: nowrap;       /* Asegura que no se bajen si hay espacio */
-  padding: 0;              /* Quitamos padding lateral para simetría */
+  gap: 20px;
+  flex-wrap: wrap;      /* Permite que los botones bajen si no caben */
+  width: 100%;          /* Ocupa todo el ancho disponible */
+  box-sizing: border-box;
+  padding: 0;
 }
 
 .btn {
@@ -197,3 +200,69 @@ body {
   .ley-datos-btn:hover {
     background-color: #d32f2f;
   }
+
+/* ===== Responsividad ===== */
+@media (max-width: 700px) {
+  .logo {
+    width: 220px;
+  }
+  .contenedor-login {
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #383838;
+  }
+  .login-box {
+    padding: 10px 5px;
+    max-width: 95vw;
+    width: 100%;
+  }
+  .form-credenciales input,
+  .form-credenciales button {
+    width: 95vw;
+    max-width: 98%;
+    font-size: 110%;
+    padding-left: 8px;
+    height: 40px;
+  }
+  .botones {
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .btn {
+    width: 60px;
+    height: 50px;
+    font-size: 10px;
+    padding: 4px;
+  }
+
+  .imagen {
+    width: 50%;
+    height: auto;
+  }
+}
+
+@media (max-width: 400px) {
+  .logo {
+    width: 120px;
+  }
+  .contenedor-login {
+    padding: 5px;
+  }
+  .form-credenciales input,
+  .form-credenciales button {
+    font-size: 90%;
+    height: 32px;
+  }
+  .btn {
+    width: 45px;
+    height: 36px;
+    font-size: 8px;
+    padding: 2px;
+  }
+
+  .imagen {
+    width: 90%;
+    height: auto;
+  }
+}

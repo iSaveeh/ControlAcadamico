@@ -29,7 +29,7 @@ $datos = $_SESSION['datos'] ?? [];
     <div class="contenedor-navbar">
         <div class="navbar">
             <div class="logo-colegio-text">
-                <img src="../images/LogoColegio.png" class="logo-colegio" alt="Logo Colegio">
+                <img src="../assets/images/LogoColegio.png" class="logo-colegio" alt="Logo Colegio">
                 <div class="titulo">
                     <div class="superior">PsicoPedagógico</div>
                     <div class="inferior">Duver Freud</div>
@@ -40,14 +40,14 @@ $datos = $_SESSION['datos'] ?? [];
                 <div class="separador"></div>
 
                 <button class="btn-navbar">
-                    <img src="../images/icons/notis.png" class="icono-navbar" alt="Notificaciones">
+                    <img src="../assets/icons/notis.png" class="icono-navbar" alt="Notificaciones">
                     <span class="texto-navbar">Notificaciones</span>
                 </button>
 
                 <div class="separador"></div>
 
                 <button class="btn-navbar">
-                    <img src="../images/icons/perfil.png" class="icono-navbar" alt="Perfil">
+                    <img src="../assets/icons/perfil.png" class="icono-navbar" alt="Perfil">
                     <span class="texto-navbar perfil-usuario">
                         <?= ($datos['Nombre'] ?? '') . ' ' . ($datos['Apellido'] ?? '') ?>
                     </span>
@@ -56,7 +56,7 @@ $datos = $_SESSION['datos'] ?? [];
                 <div class="separador"></div>
 
                 <button class="btn-navbar" id="btnCerrarSesion">
-                    <img src="../images/icons/cs.png" class="icono-navbar" alt="Cerrar sesión">
+                    <img src="../assets/icons/cs.png" class="icono-navbar" alt="Cerrar sesión">
                 </button>
             </div>
         </div>
@@ -76,7 +76,7 @@ $datos = $_SESSION['datos'] ?? [];
     <!-- MENÚ LATERAL -->
     <div class="menu-lateral" id="menulateral">
         <div class="perfil-lateral">
-            <img src="../images/icons/perfil.png" alt="Foto de perfil" class="foto-perfil">
+            <img src="../assets/icons/perfil.png" alt="Foto de perfil" class="foto-perfil">
             <div class="info-usuario">
                 <h3><?= ($datos['Nombre'] ?? '') . ' ' . ($datos['Apellido'] ?? '') ?></h3>
                 <span class="rol"><?= ucfirst($rol) ?></span>
@@ -100,7 +100,7 @@ $datos = $_SESSION['datos'] ?? [];
 
             <!-- Logo Inferior -->
             <div class="logo-inferior">
-                <img src="../images/FocusGrade.png" alt="FocusGrade">
+                <img src="../assets/images/FocusGrade.png" alt="FocusGrade">
             </div>
         </div>
     </div>

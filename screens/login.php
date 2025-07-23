@@ -62,16 +62,16 @@
       <!-- Botones de rol -->
       <div class="botones">
         <button class="btn" data-rol="admin">
-          <img src="../assets/icons/login/admin.png" alt="Admin">
+          <img src="../assets/icons/login/admin.png" class="imagen" alt="Admin">
         </button>
         <button class="btn" data-rol="profesor">
-          <img src="../assets/icons/login/profe.png" alt="Profe">
+          <img src="../assets/icons/login/profe.png" class="imagen" alt="Profe">
         </button>
         <button class="btn" data-rol="estudiante">
-          <img src="../assets/icons/login/estudiantes.png" alt="Estudiantes">
+          <img src="../assets/icons/login/estudiantes.png" class="imagen" alt="Estudiantes">
         </button>
         <button class="btn" data-rol="acudiente">
-          <img src="../assets/icons/login/padres.png" alt="Acudiente">
+          <img src="../assets/icons/login/padres.png" class="imagen" alt="Acudiente">
         </button>
       </div>
     </div>

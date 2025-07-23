@@ -16,7 +16,7 @@
     top: 80px; /* Debajo del navbar */
     right: 0;
     height: calc(100% - 80px);
-    width: 800px;
+    width: 1530px;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     z-index: 999;
