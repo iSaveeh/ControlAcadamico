@@ -21,7 +21,7 @@
 <body>
   <div class="contenedor-login">
     <div class="login-box">
-      <img src="../images/LogoColegioSinFondo.png" alt="Escudo" class="logo">
+      <img src="../assets/images/LogoColegioSinFondo.png" alt="Escudo" class="logo">
 
       <!-- Formulario -->
       <form action="../backend/DatabaseHandler.php" method="post" class="form-credenciales" id="formCredenciales">
@@ -62,16 +62,16 @@
       <!-- Botones de rol -->
       <div class="botones">
         <button class="btn" data-rol="admin">
-          <img src="../images/icons/login/admin.png" alt="Admin">
+          <img src="../assets/icons/login/admin.png" alt="Admin">
         </button>
         <button class="btn" data-rol="profesor">
-          <img src="../images/icons/login/profe.png" alt="Profe">
+          <img src="../assets/icons/login/profe.png" alt="Profe">
         </button>
         <button class="btn" data-rol="estudiante">
-          <img src="../images/icons/login/estudiantes.png" alt="Estudiantes">
+          <img src="../assets/icons/login/estudiantes.png" alt="Estudiantes">
         </button>
         <button class="btn" data-rol="acudiente">
-          <img src="../images/icons/login/padres.png" alt="Acudiente">
+          <img src="../assets/icons/login/padres.png" alt="Acudiente">
         </button>
       </div>
     </div>
