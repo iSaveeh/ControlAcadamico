@@ -1,39 +1,49 @@
-/* Estilo para el contenedor principal del contenido */
+/* Contenido principal que se corre a la derecha del menú */
 .contenido-principal {
-    margin-left: 320px; /* Igual al ancho del menú lateral */
+    margin-left: 320px; /* Ancho del menú lateral */
     padding: 20px;
     background-color: #e9eef2;
     min-height: 100vh;
     transition: all 0.3s ease;
 }
 
-/* Cada panel de contenido que se va mostrando dinámicamente */
+/* Panel donde se carga el contenido dinámico (menu_modular) */
 .panel-contenido {
     display: none;
+    padding: 20px;
+    background-color: #ffffff;
+    position: fixed;
+    top: 80px; /* Debajo del navbar */
+    right: 0;
+    height: calc(100% - 80px);
+    width: 800px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    z-index: 999;
     animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Cuando el panel está activo (se muestra) */
 .panel-contenido.activo {
     display: block;
 }
 
-/* Botones del submenú */
+/* Botones de submenú que se mostrarán dentro del panel */
 .submenu-botones {
     display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
+    flex-direction: column;
+    gap: 10px;
     margin-top: 20px;
 }
 
 .btn-submenu {
     padding: 12px 20px;
     background-color: #2e6da4;
-    color: white;
+    color: rgb(150, 28, 28);
     border: none;
     border-radius: 8px;
-    cursor: pointer;
     font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
     transition: background-color 0.2s ease;
 }
 
@@ -41,7 +51,7 @@
     background-color: #204d74;
 }
 
-/* Animación de entrada */
+/* Animación fadeIn */
 @keyframes fadeIn {
     from {
         opacity: 0;

@@ -1,0 +1,199 @@
+/* ===== Contenido principal Login ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-image: url('../images/FondoLogin.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: 400px;
+  margin-bottom: 10px;
+}
+
+.contenedor-login {
+  backdrop-filter: blur(3px);
+  background-color: #d9d9d9cc;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px #383838;
+  border: 3px solid black;
+}
+
+.login-box {
+  background-color: transparent;
+  padding: 20px 30px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 600px;
+  border-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  margin: 0 auto;
+}
+
+/* Botones de rol */
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 20px;               /* Espaciado uniforme */
+  flex-wrap: nowrap;       /* Asegura que no se bajen si hay espacio */
+  padding: 0;              /* Quitamos padding lateral para simetría */
+}
+
+.btn {
+  background: transparent;
+  width: 100px;
+  height: 90px;
+  font-size: 14px;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Arreglo del Tab en focus */
+.btn:focus {
+  outline: none;
+  box-shadow: none
+}
+
+/* Formulario de credenciales */
+.form-credenciales {
+  display: none;
+  margin-top: 20px;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.form-credenciales input {
+  width: 300px;
+  height: 50px;
+  max-width: 90%;
+  transition: background 0.3s, color 0.3s;
+  border-radius: 13px;
+  font-size: 150%;
+  font-family: 'Inter';
+  font-style: bold;
+  padding-left: 13px; /* Solo el input */
+}
+
+.form-credenciales button {
+  width: 300px;
+  height: 50px;
+  max-width: 90%;
+  transition: background 0.3s, color 0.3s;
+  border-radius: 13px;
+  font-size: 150%;
+  font-family: 'Inter';
+  font-style: bold;
+  border: 2px solid black;
+}
+
+/* ========== Colores por rol ========== */
+.form-admin input {
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid #587DA3;
+}
+.form-admin button {
+  background: #587DA3;
+  color: #000;
+  border: 2px solid #000000;
+  cursor: pointer;
+  font-family: 'inter';
+}
+
+.form-profesor input {
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid #BC5555;
+}
+.form-profesor button {
+  background: #BC5555;
+  color: #000000;
+  border: 2px solid #000000;
+  cursor: pointer;
+  font-family: 'inter';
+}
+
+.form-estudiante input {
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid #D79650;
+}
+.form-estudiante button {
+  background: #D79650;
+  color: #000000;
+  border: 2px solid #000000;
+  cursor: pointer;
+  font-family: 'inter';
+}
+
+.form-acudiente input {
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid #FED287;
+}
+.form-acudiente button {
+  background: #FED287;
+  color: #000000;
+  border: 2px solid #000000;
+  cursor: pointer;
+  font-family: 'inter';
+}
+
+/* ========== No pierdan color al obtener el focus ========== */
+.form-admin input:focus {
+  border: 2px solid #587DA3;
+  outline: none;
+}
+
+.form-profesor input:focus {
+  border: 2px solid #C94F4F;
+  outline: none;
+}
+
+.form-estudiante input:focus {
+  border: 2px solid #D79650;
+  outline: none;
+}
+
+.form-acudiente input:focus {
+  border: 2px solid #FED287;
+  outline: none;
+}
+
+.ley-datos-btn {
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    background-color: #f44336;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+  }
+
+  .ley-datos-btn:hover {
+    background-color: #d32f2f;
+  }
