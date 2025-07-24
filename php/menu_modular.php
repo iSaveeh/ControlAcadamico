@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start(); // Elimina o comenta esta línea
 
 $rol = $_SESSION['rol'] ?? '';
 
@@ -90,11 +90,11 @@ $modulos = $modulos_por_rol[$rol] ?? [];
     <h2>Opciones del menú</h2>
 
     <?php if (!empty($modulos)): ?>
-        <ul>
+        <div class="grid-opciones">
             <?php foreach ($modulos as $modulo): ?>
-                <li><button class="btn-opcion"><?= htmlspecialchars($modulo) ?></button></li>
+                <a class="btn-opcion" href="ruta_a_tu_contenido.php?modulo=..." target="iframe-contenido">Nombre del módulo</a>
             <?php endforeach; ?>
-        </ul>
+        </div>
     <?php else: ?>
         <p style="padding: 1rem;">No tienes permisos para ver los módulos.</p>
     <?php endif; ?>

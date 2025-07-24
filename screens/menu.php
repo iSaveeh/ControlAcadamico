@@ -106,13 +106,32 @@ $datos = $_SESSION['datos'] ?? [];
     </div>
 
     <!-- CONTENIDO PRINCIPAL DONDE SE CARGARÁ EL MODULAR -->
-        <div class="contenido-principal">
-            <div id="panel-menu" class="panel-contenido">
-                <!-- Aquí se cargará dinámicamente el contenido del menu_modular.php -->
-            </div>
+    <div class="contenido-principal">
+        <div id="panel-menu" class="panel-contenido">
+            <!-- Aquí se cargará dinámicamente el contenido del menu_modular.php -->
+            <?php include '../php/menu_modular.php'; ?>
         </div>
+        <iframe id="iframe-contenido" name="iframe-contenido" style="width:100%;height:600px;border:none;margin-top:20px;"></iframe>
+    </div>
 
     <!-- JS -->
     <script src="../js/menu.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const botones = document.querySelectorAll('.btn-opcion');
+        // Recupera el último botón activo
+        const lastActive = localStorage.getItem('moduloActivo');
+        if (lastActive !== null && botones[lastActive]) {
+            botones[lastActive].classList.add('active');
+        }
+        botones.forEach((btn, idx) => {
+            btn.addEventListener('click', function() {
+                botones.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                localStorage.setItem('moduloActivo', idx);
+            });
+        });
+    });
+    </script>
 </body>
 </html>

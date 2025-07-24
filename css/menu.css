@@ -9,22 +9,13 @@
 
 /* Panel donde se carga el contenido dinámico (menu_modular) */
 .panel-contenido {
-    display: none;
+    display: block;
     padding: 20px;
     background-color: #ffffff;
-    position: fixed;
-    top: 80px; /* Debajo del navbar */
-    right: 0;
-    height: calc(100% - 80px);
-    width: 1530px;
+    /* Quita position: fixed, top, right, width, height, z-index */
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
-    z-index: 999;
     animation: fadeIn 0.3s ease-in-out;
-}
-
-.panel-contenido.activo {
-    display: block;
 }
 
 /* Botones de submenú que se mostrarán dentro del panel */
@@ -61,4 +52,57 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.grid-opciones {
+    display: flex;
+    flex-wrap: nowrap;         /* No permite que los botones bajen a otra línea */
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+    overflow-x: auto;          /* Scroll horizontal si no caben */
+    padding-bottom: 10px;
+    align-items: flex-start;
+    width: 100%;               /* Asegura que ocupe todo el ancho disponible */
+    box-sizing: border-box;
+}
+
+.btn-opcion {
+    background: #f7fafd;
+    border: 2px solid #587DA3;
+    border-radius: 16px;
+    padding: 1.1rem 1rem;
+    font-size: 1.08rem;
+    color: #2c3e50;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(88, 125, 163, 0.10);
+    transition: 
+        background 0.2s,
+        box-shadow 0.2s,
+        color 0.2s,
+        border 0.2s;
+    outline: none;
+    min-width: 180px;
+    max-width: 240px;
+    margin-bottom: 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    letter-spacing: 0.5px;
+}
+
+.btn-opcion:hover,
+.btn-opcion:focus {
+    background: linear-gradient(90deg, #587DA3 0%, #7fa6d6 100%);
+    color: #fff;
+    box-shadow: 0 6px 24px rgba(88, 125, 163, 0.18);
+    border: 2px solid #2c3e50;
+}
+
+.btn-opcion.active {
+    background: linear-gradient(90deg, #587DA3 0%, #7fa6d6 100%);
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(88, 125, 163, 0.25);
+    border: 2.5px solid #2c3e50;
 }

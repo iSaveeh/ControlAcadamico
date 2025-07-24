@@ -5,6 +5,8 @@
     padding: 8px 16px;
     box-sizing: border-box;
     border-bottom: 2px solid #2c3e50;
+    z-index: 3000; /* Asegúrate que sea mayor que otros paneles */
+    position: relative; /* Necesario para que z-index funcione */
 }
 
 /* Objetos dentro de la navbar */
@@ -145,6 +147,5 @@
     background-color: #5bc0de;
     color: white;
 }
-        
 
-        
+
