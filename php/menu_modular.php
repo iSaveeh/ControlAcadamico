@@ -24,10 +24,8 @@ $modulos_por_rol = [
         'Citaciones académicas',
         'Circulares descargables',
         'Notificaciones de matrícula',
-        'PQRSF',
         'Agenda escolar',
         'Encuestas institucionales',
-        'Manual de convivencia',
         'Votaciones del gobierno escolar',
         'Agenda de eventos del colegio',
         'Pizarrón de tareas',
@@ -42,7 +40,6 @@ $modulos_por_rol = [
         'Seguimiento de notas por periodo y asignatura',
         'Autoevaluaciones por periodo',
         'Citaciones académicas',
-        'Bandeja de mensajería institucional'
     ],
     'estudiante' => [
         'Ficha de matrícula del estudiante',
@@ -55,10 +52,8 @@ $modulos_por_rol = [
         'Citaciones académicas',
         'Circulares descargables',
         'Notificaciones de matrícula',
-        'PQRSF',
         'Agenda escolar',
         'Encuestas institucionales',
-        'Manual de convivencia',
         'Votaciones del gobierno escolar',
         'Agenda de eventos del colegio',
         'Pizarrón de tareas',
@@ -73,10 +68,8 @@ $modulos_por_rol = [
         'Bandeja de mensajería institucional',
         'Estado de salud (encuesta sanitaria)',
         'Notificaciones de matrícula',
-        'PQRSF',
         'Circulares descargables',
         'Agenda escolar',
-        'Manual de convivencia',
         'Encuestas institucionales',
         'Visualización de calendario académico'
     ]
