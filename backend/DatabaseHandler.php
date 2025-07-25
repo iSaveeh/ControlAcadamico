@@ -1,8 +1,9 @@
 <?php
 session_start();
-require_once 'conexion.php';
+require_once 'conexion.php'; // Debe definir $conexion como MySQLi
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Normalizar entradas
     $usuario = strtolower(trim($_POST['usuario'] ?? ''));
     $contrasena = strtolower(trim($_POST['contrasena'] ?? ''));
     $rol = strtolower(trim($_POST['rol'] ?? ''));
@@ -12,50 +13,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Verificar en tabla 'usuarios'
-    $stmt = $conn->prepare("SELECT * FROM usuarios WHERE usuario = :usuario AND contrasena = :contrasena AND rol = :rol");
-    $stmt->execute([
-        ':usuario' => $usuario,
-        ':contrasena' => $contrasena,
-        ':rol' => $rol
-    ]);
-    $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // 1. Verificar credenciales en tabla 'usuarios'
+    $stmt = $conexion->prepare("SELECT * FROM usuarios WHERE usuario = ? AND contrasena = ? AND rol = ?");
+    $stmt->bind_param("sss", $usuario, $contrasena, $rol);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
 
-    if (count($resultado) === 1) {
+    if ($resultado->num_rows > 0) {
+        // 2. Guardar info básica
         $_SESSION['usuario'] = $usuario;
         $_SESSION['rol'] = $rol;
 
-        // Obtener información adicional según el rol
+        // 3. Obtener el ID y nombre del usuario según su rol
         switch ($rol) {
             case 'profesor':
-                $query = "SELECT IDProfesor, Nombre, Apellido FROM profesor WHERE Usuario = :usuario";
+                $query = "SELECT IDProfesor AS id, Nombre, Apellido FROM profesor WHERE Usuario = ?";
                 break;
             case 'estudiante':
-                $query = "SELECT IDEstudiante, Nombre, Apellido FROM estudiante WHERE Usuario = :usuario";
+                $query = "SELECT IDEstudiante AS id, Nombre, Apellido FROM estudiante WHERE Usuario = ?";
                 break;
             case 'admin':
-                $query = "SELECT IDAdministrador, Nombre, Apellido FROM administrador WHERE Usuario = :usuario";
+                $query = "SELECT IDAdministrador AS id, Nombre, Apellido FROM administrador WHERE Usuario = ?";
                 break;
             case 'acudiente':
-                $query = "SELECT IDAcudiente, Nombre, Apellido FROM acudiente WHERE Usuario = :usuario";
+                $query = "SELECT IDAcudiente AS id, Nombre, Apellido FROM acudiente WHERE Usuario = ?";
                 break;
             default:
                 echo "error: rol no válido";
                 exit;
         }
 
-        $stmt = $conn->prepare($query);
-        $stmt->execute([':usuario' => $usuario]);
-        $datos = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt2 = $conexion->prepare($query);
+        $stmt2->bind_param("s", $usuario);
+        $stmt2->execute();
+        $resultado2 = $stmt2->get_result();
+        $datos = $resultado2->fetch_assoc();
 
+        if (!$datos) {
+            echo "error: usuario no encontrado en tabla correspondiente al rol.";
+            exit;
+        }
+
+        // 4. Guardar ID y nombre completo en sesión
+        $_SESSION['id'] = $datos['id'];
+        $_SESSION['nombre_completo'] = $datos['Nombre'] . ' ' . $datos['Apellido'];
         $_SESSION['datos'] = $datos;
 
-        // Redirigir a su respectiva pantalla
+        // 5. Redirigir al menú principal
         header("Location: ../screens/menu.php");
         exit;
-        } else {
+
+    } else {
+        // Credenciales incorrectas
         $_SESSION['login_error'] = "Usuario, contraseña o rol incorrecto";
-        header("Location: ../screens/login.php"); // Cambia según tu ruta al formulario de login
+        header("Location: ../screens/login.php");
         exit;
     }
 }

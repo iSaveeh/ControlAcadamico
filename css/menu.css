@@ -1,57 +1,326 @@
-/* Contenido principal que se corre a la derecha del menú */
-.contenido-principal {
-    margin-left: 320px; /* Ancho del menú lateral */
-    padding: 20px;
-    background-color: #e9eef2;
-    min-height: 100vh;
-    transition: all 0.3s ease;
-}
-
-/* Panel donde se carga el contenido dinámico (menu_modular) */
-.panel-contenido {
-    display: none;
-    padding: 20px;
-    background-color: #ffffff;
+/* === NAVBAR GENERAL === */
+.contenedor-navbar {
+    width: 100%;
+    height: 80px;
+    background-color: #587DA3;
+    padding: 8px 16px;
+    box-sizing: border-box;
+    border-bottom: 2px solid #2c3e50;
     position: fixed;
-    top: 80px; /* Debajo del navbar */
-    right: 0;
-    height: calc(100% - 80px);
-    width: 1530px;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    z-index: 999;
-    animation: fadeIn 0.3s ease-in-out;
+    top: 0;
+    left: 0;
+    z-index: 1000;
 }
 
-.panel-contenido.activo {
-    display: block;
-}
-
-/* Botones de submenú que se mostrarán dentro del panel */
-.submenu-botones {
+.navbar {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
 }
 
-.btn-submenu {
-    padding: 12px 20px;
-    background-color: #2e6da4;
-    color: rgb(150, 28, 28);
+.logo-colegio-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-colegio {
+    width: 55px;
+    height: auto;
+    cursor: pointer;
+}
+
+.titulo .superior {
+    font-style: italic;
+    font-size: 15px;
+    color: white;
+    font-weight: 400;
+    text-shadow: 2px 5px 3px rgba(0, 0, 0, 0.575);
+}
+
+.titulo .inferior {
+    font-size: 17px;
+    font-weight: bold;
+    font-style: italic;
+    color: white;
+    text-shadow: 2px 5px 3px rgba(0, 0, 0, 0.575);
+}
+
+/* Botones Navbar */
+.navbar-botones {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-navbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px 10px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-navbar:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+}
+
+.icono-navbar {
+    width: 45px;
+    height: 45px;
+}
+
+.texto-navbar {
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    font-style: oblique;
+    font-weight: 500;
+    color: black;
+    pointer-events: none;
+}
+
+.perfil-usuario {
+    border-bottom: 1px solid black;
+}
+
+.separador {
+    height: 30px;
+    width: 1px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Modal cerrar sesión */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(3px);
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-contenido {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 90%;
+}
+
+.modal-botones {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.modal-botones button {
+    padding: 10px 40px;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
     font-weight: bold;
+    font-size: x-large;
+    cursor: pointer;
+}
+
+.btn-si {
+    background-color: #d9534f;
+    color: white;
+}
+
+.btn-no {
+    background-color: #5bc0de;
+    color: white;
+}
+
+/* === MENÚ LATERAL === */
+.menu-lateral {
+    position: fixed;
+    top: 80px; /* igual al alto de la navbar */
+    left: 0;
+    width: 320px;
+    height: calc(100vh - 80px); /* ocupa toda la altura menos la navbar */
+    background-color: #f8f9fa;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+    padding: 20px 0px;
+    font-family: 'Inter', sans-serif;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+}
+
+.foto-perfil {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.perfil-lateral {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.info-usuario h3 {
+    margin: 5px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.rol {
+    font-size: 13px;
+    color: #555;
+    margin: 0;
+}
+
+.estado-en-linea {
+    font-size: 13px;
+    color: green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.punto-verde {
+    width: 8px;
+    height: 8px;
+    background-color: green;
+    border-radius: 50%;
+}
+
+.opciones-menu-lateral {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+.item-menu {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 12px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 15px;
+    color: #333;
+    border-radius: 6px;
     transition: background-color 0.2s ease;
 }
 
-.btn-submenu:hover {
-    background-color: #204d74;
+.item-menu:hover {
+    background-color: #e2e6ea;
 }
 
-/* Animación fadeIn */
+.icono {
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+}
+
+.logo-inferior {
+    position: static;
+    width: 100%;
+    text-align: center;
+    margin-top: 40px;
+    background: inherit;
+    padding-bottom: 20px;
+}
+
+.logo-inferior img {
+    width: 180px;
+    height: auto;
+    opacity: 0.95;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* === PANEL DE MÓDULOS (menu_modular) === */
+.menu-modular {
+    padding: 20px;
+}
+
+.titulo-modular {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.grid-modulos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+    padding: 10px;
+    margin: 0 auto;
+    max-width: 1000px;
+}
+
+a.btn-opcion {
+    background-color: #ffffff;
+    border: 2px solid #004a99;
+    border-radius: 16px;
+    padding: 20px 10px;
+    color: #004a99;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    width: 100%;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+a.btn-opcion:hover {
+    background-color: #587DA3;
+    transform: translateY(-2px);
+    color: white;
+}
+
+a.btn-opcion img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 10px;
+    object-fit: contain;
+}
+
+a.btn-opcion span {
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* === CONTENIDO PRINCIPAL === */
+.contenido-principal {
+    margin-left: 320px;
+    padding: 80px 20px 20px 20px; /* Compensa navbar fijo arriba */
+    background-color: #ffffff;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* === ANIMACIONES Y RESPONSIVIDAD === */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -61,4 +330,102 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+@media (max-width: 900px) {
+    .menu-lateral {
+        width: 220px;
+    }
+
+    .contenido-principal {
+        margin-left: 0;
+        padding: 100px 20px 20px 20px;
+    }
+
+    .panel-contenido {
+        left: 0;
+        top: 0;
+        height: auto;
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+    }
+
+    .foto-perfil {
+        width: 70px;
+        height: 70px;
+    }
+
+    .logo-inferior img {
+        width: 120px;
+    }
+
+    .item-menu {
+        font-size: 13px;
+        padding: 10px 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .menu-lateral {
+        width: 100vw;
+        padding: 8px 0px;
+        box-shadow: none;
+    }
+
+    .contenido-principal {
+        margin-left: 0;
+        padding: 100px 8px 20px 8px;
+    }
+
+    .panel-contenido {
+        width: 100vw;
+        padding: 8px;
+    }
+
+    .perfil-lateral {
+        margin-bottom: 12px;
+    }
+
+    .foto-perfil {
+        width: 48px;
+        height: 48px;
+    }
+
+    .info-usuario h3 {
+        font-size: 13px;
+    }
+
+    .rol,
+    .estado-en-linea {
+        font-size: 11px;
+    }
+
+    .item-menu {
+        font-size: 12px;
+        padding: 8px 6px;
+    }
+
+    .icono {
+        font-size: 15px;
+        width: 16px;
+    }
+
+    .logo-inferior img {
+        width: 80px;
+    }
+}
+
+.layout-container {
+    display: flex;
+    min-height: 100vh;
+    background: #fff;
+}
+
+.contenido-principal {
+    flex: 1;
+    background: #fff;
+    min-height: unset; /* Elimina min-height: 100vh */
+    padding: 80px 20px 20px 20px; /* Compensa navbar fijo arriba */
+    box-sizing: border-box;
 }

@@ -11,8 +11,6 @@ $datos = $_SESSION['datos'] ?? [];
     <title>Plataforma Duver Freud FG</title>
 
     <!-- Hojas de estilo -->
-    <link rel="stylesheet" href="../css/navbar.css">
-    <link rel="stylesheet" href="../css/menulateral.css">
     <link rel="stylesheet" href="../css/general.css">
     <link rel="stylesheet" href="../css/menu.css">
 
@@ -73,44 +71,53 @@ $datos = $_SESSION['datos'] ?? [];
         </div>
     </div>
 
-    <!-- MENÚ LATERAL -->
-    <div class="menu-lateral" id="menulateral">
-        <div class="perfil-lateral">
-            <img src="../assets/icons/perfil.png" alt="Foto de perfil" class="foto-perfil">
-            <div class="info-usuario">
-                <h3><?= ($datos['Nombre'] ?? '') . ' ' . ($datos['Apellido'] ?? '') ?></h3>
-                <span class="rol"><?= ucfirst($rol) ?></span>
-                <div class="estado-en-linea">
-                    <div class="punto-verde"></div> En línea
+    <!-- AGRUPA TODO EN UN CONTENEDOR FLEXIBLE -->
+    <div class="layout-container">
+        <!-- MENÚ LATERAL -->
+        <div class="menu-lateral" id="menulateral">
+            <div class="perfil-lateral">
+                <img src="../assets/icons/perfil.png" alt="Foto de perfil" class="foto-perfil">
+                <div class="info-usuario">
+                    <h3><?= ($datos['Nombre'] ?? '') . ' ' . ($datos['Apellido'] ?? '') ?></h3>
+                    <span class="rol"><?= ucfirst($rol) ?></span>
+                    <div class="estado-en-linea">
+                        <div class="punto-verde"></div> En línea
+                    </div>
+                </div>
+            </div>
+
+            <div class="opciones-menu-lateral">
+                <!-- Boton cargado por JS -->
+                <button class="item-menu" id="btnMenu">
+                    <i class="icono fas fa-sitemap"></i> Menú
+                </button>
+
+                <!-- Resto de enlaces normales -->
+
+                <!-- Logo Inferior -->
+                <div class="logo-inferior">
+                    <img src="../assets/images/FocusGrade.png" alt="FocusGrade">
                 </div>
             </div>
         </div>
 
-        <div class="opciones-menu-lateral">
-            <button class="item-menu"><i class="icono fas fa-home"></i> Inicio</button>
-            <button class="item-menu" id="btnMenu">
-                <i class="icono fas fa-sitemap"></i> Menu
-            </button>
-            <button class="item-menu"><i class="icono fas fa-envelope"></i> Correo</button>
-            <button class="item-menu"><i class="icono fas fa-calendar-alt"></i> Calendario</button>
-            <button class="item-menu"><i class="icono fas fa-book"></i> Manual Convivencia / SIEE</button>
-            <button class="item-menu"><i class="icono fas fa-comment-dots"></i> PQR</button>
-            <button class="item-menu"><i class="icono fas fa-download"></i> Descargas</button>
-            <button class="item-menu"><i class="icono fas fa-question-circle"></i> Ayuda</button>
-
-            <!-- Logo Inferior -->
-            <div class="logo-inferior">
-                <img src="../assets/images/FocusGrade.png" alt="FocusGrade">
-            </div>
+        <!-- CONTENIDO PRINCIPAL -->
+        <div class="contenido-principal" id="contenido-principal">
+            <?php
+            if (isset($_GET['mod'])) {
+                $modulo = basename($_GET['mod']); // evita rutas fuera del proyecto
+                $archivo = '../mod/' . $modulo . '.php'; // Ruta corregida
+                if (file_exists($archivo)) {
+                    include $archivo;
+                } else {
+                    echo "<p>Módulo no encontrado: $modulo</p>";
+                }
+            } else {
+                echo "<p>Bienvenido a Focus Grade</p>";
+            }
+            ?>
         </div>
     </div>
-
-    <!-- CONTENIDO PRINCIPAL DONDE SE CARGARÁ EL MODULAR -->
-        <div class="contenido-principal">
-            <div id="panel-menu" class="panel-contenido">
-                <!-- Aquí se cargará dinámicamente el contenido del menu_modular.php -->
-            </div>
-        </div>
 
     <!-- JS -->
     <script src="../js/menu.js"></script>

@@ -77,6 +77,7 @@
     </div>
   </div>
 
+  <!-- Boton de la ley Habeas Data -->
   <a href="http://www.secretariasenado.gov.co/senado/basedoc/ley_1581_2012.html" target="_blank" class="ley-datos-btn">
     Ley 1581 de 2012 - Habeas Data
   </a>
