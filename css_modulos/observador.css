@@ -1,0 +1,231 @@
+.observador-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px #0001;
+    padding: 24px;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+.observador-barra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #faf8f7;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    position: relative;
+}
+
+.observador-barra strong {
+    margin-right: 8px;
+    color: #2d3a4a;
+}
+
+.btn-observador {
+    background: #6c8cff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-observador:hover {
+    background: #4666c5;
+}
+
+
+.observador-historial {
+    margin-top: 10px;
+    display: block;
+}
+
+.observador-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ece6e6;
+    border-radius: 8px 8px 0 0;
+    padding: 12px 20px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.observador-acciones button {
+    margin-left: 8px;
+    background: #6c8cff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.observador-acciones button:hover {
+    background: #4666c5;
+}
+
+.observador-buscar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.observador-buscar input {
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    padding: 5px 10px;
+    outline: none;
+}
+
+.observador-lista {
+    padding: 18px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.observador-tarjeta {
+    display: flex;
+    align-items: center;
+    background: #f7f7fa;
+    border-radius: 8px;
+    padding: 14px 18px;
+    box-shadow: 0 1px 4px #0001;
+    gap: 18px;
+    border-left: 8px solid #bdbdbd;
+    position: relative;
+}
+
+.observador-tarjeta.academica {background:  #d8f7db; }
+.observador-tarjeta.convivencia {background:  #fff3b0; }
+.observador-tarjeta.disciplinaria {background:  #ffd6d6;}
+
+.observador-tarjeta:hover {
+    border-left-color: #219ebc !important;
+    box-shadow: 0 4px 16px #219ebc22;
+}
+
+.observador-funcionario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 160px;
+}
+.observador-funcionario img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #eee;
+    background: #fff;
+}
+
+.observador-info {
+    flex: 1;
+}
+.observador-info strong {
+    display: block;
+    font-size: 1.08em;
+    margin-bottom: 4px;
+}
+.observador-info p {
+    margin: 0;
+    font-size: 0.98em;
+    color: #333;
+}
+
+.btn-detalles {
+    background: #8ecae6;
+    color: #222;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-left: 12px;
+}
+.btn-detalles:hover {
+    background: #219ebc;
+    color: #fff;
+}
+
+/* Estilo para el formulario (puede ser solo para separación) */
+.observador-form-grado {
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    background: none;
+    padding: 0;
+    border: none;
+}
+
+/* Estilo para el label con fondo gris claro */
+.observador-form-grado label {
+    background: #ececec;
+    padding: 7px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #333;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+/* Estilo para el select */
+.observador-form-grado select {
+    padding: 7px 16px;
+    border-radius: 6px;
+    border: 1px solid #bdbdbd;
+    background: #fff;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 1em;
+    color: #222;
+    transition: border 0.2s;
+}
+.observador-form-grado select:focus {
+    border: 1.5px solid #219ebc;
+    outline: none;
+}
+
+.observador-filtros-box {
+    background: #f7f7fa;
+    border-radius: 10px;
+    padding: 18px 34px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 1px 6px #0001;
+}
+
+.observador-ubicacion {
+    margin-left: 18px;
+    background: #e9f1fb;
+    color: #2d3a4a;
+    border-radius: 6px;
+    padding: 7px 16px;
+    font-size: 0.98em;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+.observador-frame {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px #0001;
+    margin-bottom: 28px;
+    padding: 24px 28px;
+}
+
+.observador-frame-filtros {
+    max-width: 500px;
+    margin: 0 auto 24px auto;
+}
+
+.observador-frame-resultados {
+    margin: 0 auto;
+}
