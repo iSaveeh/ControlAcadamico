@@ -11,20 +11,19 @@ $modulos = [
         'Ficha de Matrícula del Estudiante',
         'Perfil del Estudiante',
         'Visualización de Profesores',
-        'Registro Usuario' 
+        'Registro Usuario',
+        'Asignacion de Horarios'
     ],
     'profesor' => [
         'Control de Notas',
         'Registro de Asistencias',
         'Observador del Estudiante',
-        'Seguimiento de Notas por Periodo y Asignatura',
-        'Pizarrón de Tareas'
+        'Pizarrón de Tareas',
     ],
     'estudiante' => [
         'Boletines Académicos',
-        'Perfil del Estudiante',
-        'Visualización de Profesores',
         'Horario de Clase',
+        'Pizarrón de Tareas',
     ],
     'acudiente' => [
         'Boletines Académicos',
