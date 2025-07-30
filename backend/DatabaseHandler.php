@@ -59,6 +59,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['nombre_completo'] = $datos['Nombre'] . ' ' . $datos['Apellido'];
         $_SESSION['datos'] = $datos;
 
+        // Guardar el ID específico según el rol para compatibilidad con módulos
+        switch ($rol) {
+            case 'profesor':
+                $_SESSION['idprofesor'] = $datos['id'];
+                break;
+            case 'estudiante':
+                $_SESSION['idestudiante'] = $datos['id'];
+                break;
+            case 'admin':
+                $_SESSION['idadministrador'] = $datos['id'];
+                break;
+            case 'acudiente':
+                $_SESSION['idacudiente'] = $datos['id'];
+                break;
+        }
+
         // 5. Redirigir al menú principal
         header("Location: ../screens/menu.php");
         exit;

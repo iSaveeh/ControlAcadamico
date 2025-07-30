@@ -27,7 +27,8 @@ $modulos = [
         'Votaciones del Gobierno Escolar',
         'Agenda de Eventos del Colegio',
         'Pizarrón de Tareas',
-        'Visualización de Calendario Académico'
+        'Visualización de Calendario Académico',
+        'Registro Usuario' 
     ],
     'profesor' => [
         'Control de Notas',
