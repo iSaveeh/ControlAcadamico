@@ -51,10 +51,22 @@ $modulosVisibles = $modulos[$rol] ?? [];
         <?php foreach ($modulosVisibles as $modulo): 
             $archivo = convertirNombreArchivo($modulo);
         ?>
-            <a href="?mod=<?= $archivo ?>" class="btn-opcion">
-                <img src="../assets/images/modulos/<?= $archivo ?>.png" alt="<?= htmlspecialchars($modulo) ?>">
-                <span><?= htmlspecialchars($modulo) ?></span>
-            </a>
-        <?php endforeach; ?>
+            
+            <?php if ($modulo == 'Registro de Asistencias'): ?>
+                
+                <a href="#" class="btn-opcion btn-cargar-asistencia">
+                    <img src="../assets/images/modulos/<?= $archivo ?>.png" alt="<?= htmlspecialchars($modulo) ?>">
+                    <span><?= htmlspecialchars($modulo) ?></span>
+                </a>
+
+            <?php else: ?>
+                
+                <a href="?mod=<?= $archivo ?>" class="btn-opcion">
+                    <img src="../assets/images/modulos/<?= $archivo ?>.png" alt="<?= htmlspecialchars($modulo) ?>">
+                    <span><?= htmlspecialchars($modulo) ?></span>
+                </a>
+
+            <?php endif; ?>
+            <?php endforeach; ?>
     </div>
 </div>

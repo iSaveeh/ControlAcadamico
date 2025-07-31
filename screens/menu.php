@@ -10,20 +10,16 @@ $datos = $_SESSION['datos'] ?? [];
     <meta charset="UTF-8">
     <title>Plataforma Duver Freud FG</title>
 
-    <!-- Hojas de estilo -->
     <link rel="stylesheet" href="../css/general.css">
     <link rel="stylesheet" href="../css/menu.css">
 
-    <!-- Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;1,400;1,700&display=swap" rel="stylesheet">
 </head>
 
 <body data-rol="<?= $_SESSION['rol'] ?>">
 
-    <!-- NAVBAR -->
     <div class="contenedor-navbar">
         <div class="navbar">
             <div class="logo-colegio-text">
@@ -60,7 +56,6 @@ $datos = $_SESSION['datos'] ?? [];
         </div>
     </div>
 
-    <!-- MODAL -->
     <div class="modal" id="modalCerrarSesion">
         <div class="modal-contenido">
             <h2>¿Estás seguro de cerrar sesión?</h2>
@@ -71,9 +66,7 @@ $datos = $_SESSION['datos'] ?? [];
         </div>
     </div>
 
-    <!-- AGRUPA TODO EN UN CONTENEDOR FLEXIBLE -->
     <div class="layout-container">
-        <!-- MENÚ LATERAL -->
         <div class="menu-lateral" id="menulateral">
             <div class="perfil-lateral">
                 <img src="../assets/icons/perfil.png" alt="Foto de perfil" class="foto-perfil">
@@ -87,21 +80,16 @@ $datos = $_SESSION['datos'] ?? [];
             </div>
 
             <div class="opciones-menu-lateral">
-                <!-- Boton cargado por JS -->
                 <button class="item-menu" id="btnMenu">
                     <i class="icono fas fa-sitemap"></i> Menú
                 </button>
 
-                <!-- Resto de enlaces normales -->
-
-                <!-- Logo Inferior -->
                 <div class="logo-inferior">
                     <img src="../assets/images/FocusGrade.png" alt="FocusGrade">
                 </div>
             </div>
-        </div>
+            </div>
 
-        <!-- CONTENIDO PRINCIPAL -->
         <div class="contenido-principal" id="contenido-principal">
             <?php
             if (isset($_GET['mod'])) {
@@ -119,7 +107,6 @@ $datos = $_SESSION['datos'] ?? [];
         </div>
     </div>
 
-    <!-- JS -->
     <script src="../js/menu.js"></script>
 </body>
 </html>

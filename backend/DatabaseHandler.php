@@ -9,7 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rol = strtolower(trim($_POST['rol'] ?? ''));
 
     if (empty($usuario) || empty($contrasena) || empty($rol)) {
-        echo "error: campos vacíos";
+        $_SESSION['login_error'] = "Todos los campos son obligatorios.";
+        header("Location: ../screens/login.php");
         exit;
     }
 
@@ -24,25 +25,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['usuario'] = $usuario;
         $_SESSION['rol'] = $rol;
 
-        // 3. Obtener el ID y nombre del usuario según su rol
+        // 3. Obtener TODOS los datos del usuario según su rol
+        $tabla = '';
         switch ($rol) {
             case 'profesor':
-                $query = "SELECT IDProfesor AS id, Nombre, Apellido FROM profesor WHERE Usuario = ?";
+                $tabla = 'profesor';
                 break;
             case 'estudiante':
-                $query = "SELECT IDEstudiante AS id, Nombre, Apellido FROM estudiante WHERE Usuario = ?";
+                $tabla = 'estudiante';
                 break;
             case 'admin':
-                $query = "SELECT IDAdministrador AS id, Nombre, Apellido FROM administrador WHERE Usuario = ?";
+                $tabla = 'administrador';
                 break;
             case 'acudiente':
-                $query = "SELECT IDAcudiente AS id, Nombre, Apellido FROM acudiente WHERE Usuario = ?";
+                $tabla = 'acudiente';
                 break;
             default:
-                echo "error: rol no válido";
+                $_SESSION['login_error'] = "Rol no válido.";
+                header("Location: ../screens/login.php");
                 exit;
         }
 
+        // ===== CÓDIGO CORREGIDO AQUÍ =====
+        // Usamos SELECT * para traer todos los datos del usuario, incluyendo el ID con su nombre original
+        $query = "SELECT * FROM $tabla WHERE Usuario = ?";
+        // ===================================
+        
         $stmt2 = $conexion->prepare($query);
         $stmt2->bind_param("s", $usuario);
         $stmt2->execute();
@@ -50,30 +58,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $datos = $resultado2->fetch_assoc();
 
         if (!$datos) {
-            echo "error: usuario no encontrado en tabla correspondiente al rol.";
+            $_SESSION['login_error'] = "El usuario no existe en la tabla de su rol.";
+            header("Location: ../screens/login.php");
             exit;
         }
 
-        // 4. Guardar ID y nombre completo en sesión
-        $_SESSION['id'] = $datos['id'];
-        $_SESSION['nombre_completo'] = $datos['Nombre'] . ' ' . $datos['Apellido'];
+        // 4. Guardar todos los datos del usuario en la sesión
         $_SESSION['datos'] = $datos;
-
-        // Guardar el ID específico según el rol para compatibilidad con módulos
-        switch ($rol) {
-            case 'profesor':
-                $_SESSION['idprofesor'] = $datos['id'];
-                break;
-            case 'estudiante':
-                $_SESSION['idestudiante'] = $datos['id'];
-                break;
-            case 'admin':
-                $_SESSION['idadministrador'] = $datos['id'];
-                break;
-            case 'acudiente':
-                $_SESSION['idacudiente'] = $datos['id'];
-                break;
-        }
 
         // 5. Redirigir al menú principal
         header("Location: ../screens/menu.php");
