@@ -1,5 +1,12 @@
 <?php
 session_start();
+
+// Redirigir si el usuario no está logueado
+if (!isset($_SESSION['usuario_id']) || empty($_SESSION['rol'])) { // Ajusta 'usuario_id' si usas otro nombre para el ID en la sesión
+    header('Location: login.php'); // Redirige a login.php (está en la misma carpeta screens/)
+    exit();
+}
+
 $rol = $_SESSION['rol'] ?? '';
 $datos = $_SESSION['datos'] ?? [];
 ?>
@@ -13,6 +20,18 @@ $datos = $_SESSION['datos'] ?? [];
     <!-- Hojas de estilo -->
     <link rel="stylesheet" href="../css/general.css">
     <link rel="stylesheet" href="../css/menu.css">
+
+    <?php
+// Incluir el CSS específico del módulo si existe
+// Asegúrate de que $modulo ya esté definido si se ha cargado un módulo
+$current_modulo_name = $_GET['mod'] ?? ''; // Obtener el nombre del módulo de la URL
+if (!empty($current_modulo_name)) {
+    $css_modulo_path = '../css_modulos/' . basename($current_modulo_name) . '.css';
+    if (file_exists($css_modulo_path)) {
+        echo '<link rel="stylesheet" href="' . $css_modulo_path . '">';
+    }
+}
+?>
 
     <!-- Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -104,22 +123,32 @@ $datos = $_SESSION['datos'] ?? [];
         <!-- CONTENIDO PRINCIPAL -->
         <div class="contenido-principal" id="contenido-principal">
             <?php
-            if (isset($_GET['mod'])) {
-                $modulo = basename($_GET['mod']); // evita rutas fuera del proyecto
-                $archivo = '../mod/' . $modulo . '.php'; // Ruta corregida
-                if (file_exists($archivo)) {
-                    include $archivo;
+                if (isset($_GET['mod'])) {
+                    $modulo = basename($_GET['mod']); // evita rutas fuera del proyecto
+                    $archivo = '../mod/' . $modulo . '.php'; // Ruta corregida
+                    if (file_exists($archivo)) {
+                        include $archivo;
+                    } else {
+                        echo "<p>Módulo no encontrado: $modulo</p>";
+                    }
                 } else {
-                    echo "<p>Módulo no encontrado: $modulo</p>";
+                    echo "<p>Bienvenido a Focus Grade</p>";
                 }
-            } else {
-                echo "<p>Bienvenido a Focus Grade</p>";
-            }
             ?>
         </div>
     </div>
 
     <!-- JS -->
     <script src="../js/menu.js"></script>
+    <?php
+        // Incluir el JS específico del módulo si existe
+        $current_modulo_name = $_GET['mod'] ?? '';
+        if (!empty($current_modulo_name)) {
+            $js_modulo_path = '../js/' . basename($current_modulo_name) . '.js';
+            if (file_exists($js_modulo_path)) {
+                echo '<script src="' . $js_modulo_path . '"></script>';
+            }
+        }
+    ?>
 </body>
 </html>
