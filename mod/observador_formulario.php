@@ -1,57 +1,64 @@
 <?php
-// Aquí puedes validar sesión, permisos, o cargar datos dinámicos si necesitas
-?>
+require_once '../backend/conexion.php'; 
 
+if (!isset($_SESSION['rol']) || !in_array($_SESSION['rol'], ['profesor', 'admin'])) {
+    die("Acceso denegado.");
+}
+$grados = $conexion->query("SELECT IDGrado, NombreGrado FROM grados ORDER BY NombreGrado ASC");
+$estudiantes_query = $conexion->query(
+    "SELECT e.IDEstudiante, e.Nombre, e.Apellido, s.IDGrado 
+     FROM estudiante e 
+     JOIN salon s ON e.IDSalon = s.IDSalon 
+     ORDER BY e.Apellido, e.Nombre ASC"
+);
+
+$todos_los_estudiantes = [];
+while ($est = $estudiantes_query->fetch_assoc()) {
+    $todos_los_estudiantes[] = $est;
+}
+
+$nombre_autor = $_SESSION['nombre_completo'] ?? 'Usuario no identificado';
+?>
 <link rel="stylesheet" href="../css_modulos/observador_formulario.css">
 
 <div class="observador-container">
-    <form class="form-observacion" method="post" action="guardar_observacion.php">
+    <form class="form-observacion" method="post" action="../mod/guardar_observacion.php">
         <h2>Formulario de Observación</h2>
 
         <div class="observador-form-fila">
             <div class="observador-form-item">
                 <label for="fecha">Fecha de anotación</label>
-                <input type="date" id="fecha" name="fecha" required>
+                <input type="date" id="fecha" name="fecha" value="<?= date('Y-m-d') ?>" required>
             </div>
-            <div class="observador-form-item">
-                <label for="grado">Grado y Aula</label>
-                <select id="grado" name="grado" required>
-                    <option value="">Seleccione...</option>
-                    <option value="6A">6A</option>
-                    <option value="7B">7B</option>
-                    <option value="8C">8C</option>
-                    <!-- Agrega más grados y aulas -->
-                </select>
+             <div class="observador-form-item">
+                <label>Realizado por:</label>
+                <span style="padding-top: 8px; display: block; font-weight: normal;"><?= htmlspecialchars($nombre_autor) ?></span>
             </div>
-        </div>
-
-        <div class="observador-form-item">
-            <label for="estudiante">Nombre del estudiante</label>
-            <input type="text" id="estudiante" name="estudiante" placeholder="Buscar por nombre o apellido" required>
         </div>
 
         <div class="observador-form-fila">
             <div class="observador-form-item">
-                <label for="asignatura">Asignatura</label>
-                <select id="asignatura" name="asignatura" onchange="mostrarProfesor(this.value)" required>
-                    <option value="">Seleccione...</option>
-                    <option value="Matemáticas">Matemáticas</option>
-                    <option value="Lengua">Lengua</option>
-                    <option value="Ciencias">Ciencias</option>
-                    <!-- Agrega más asignaturas -->
+                <label for="filtro-grado">Paso 1: Seleccione un Grado</label>
+                <select id="filtro-grado">
+                    <option value="">Seleccione un grado para ver los estudiantes...</option>
+                    <?php foreach ($grados as $grado): ?>
+                        <option value="<?= htmlspecialchars($grado['IDGrado']) ?>"><?= htmlspecialchars($grado['NombreGrado']) ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
+
             <div class="observador-form-item">
-                <label>Profesor:</label>
-                <span id="nombre-profesor">---</span>
+                <label for="estudiante">Paso 2: Seleccione el Estudiante</label>
+                <select id="estudiante" name="IDEstudiante" required disabled>
+                    <option value="">--</option>
+                </select>
             </div>
         </div>
-
         <div class="observador-form-item">
             <label for="tipo">Tipo de observación</label>
             <select id="tipo" name="tipo" required>
                 <option value="">Seleccione...</option>
-                <option value="Académica">Académica</option>
+                <option value="Academica">Académica</option>
                 <option value="Convivencia">Convivencia</option>
                 <option value="Disciplinaria">Disciplinaria</option>
             </select>
@@ -63,35 +70,45 @@
         </div>
 
         <div class="observador-form-item">
-            <label for="compromiso1">Compromiso del estudiante</label>
-            <input type="text" id="compromiso1" name="compromiso1" required>
-        </div>
-
-        <div class="observador-form-item">
-            <label for="compromiso2">Si reincide, ¿qué pasa?</label>
-            <input type="text" id="compromiso2" name="compromiso2">
+            <label for="compromiso">Compromiso del estudiante (Opcional)</label>
+            <textarea id="compromiso" name="compromiso" rows="3" placeholder="Ej: El estudiante se compromete a..."></textarea>
         </div>
 
         <div class="observador-form-boton">
             <button type="submit">Crear observación</button>
         </div>
-
-        <div class="observador-firmas">
-            <span>Firma del estudiante</span>
-            <span>Firma del padre/acudiente</span>
-            <span>Firma del profesor</span>
-        </div>
     </form>
 </div>
 
+
 <script>
-// Script simple para mostrar el profesor (puedes mejorarlo con datos reales)
-function mostrarProfesor(asignatura) {
-    const profesores = {
-        'Matemáticas': 'Prof. García',
-        'Lengua': 'Prof. Martínez',
-        'Ciencias': 'Prof. Rivera'
-    };
-    document.getElementById('nombre-profesor').textContent = profesores[asignatura] || '---';
-}
+document.addEventListener('DOMContentLoaded', function() {
+    const estudiantes = <?= json_encode($todos_los_estudiantes) ?>;
+
+    const selectorGrado = document.getElementById('filtro-grado');
+    const selectorEstudiante = document.getElementById('estudiante');
+
+    selectorGrado.addEventListener('change', function() {
+        const idGradoSeleccionado = this.value;
+
+        selectorEstudiante.innerHTML = '<option value="">Seleccione un estudiante...</option>';
+        selectorEstudiante.disabled = true;
+
+        if (idGradoSeleccionado) {
+            const estudiantesDelGrado = estudiantes.filter(est => est.IDGrado == idGradoSeleccionado);
+            
+            if (estudiantesDelGrado.length > 0) {
+                estudiantesDelGrado.forEach(function(estudiante) {
+                    const opcion = document.createElement('option');
+                    opcion.value = estudiante.IDEstudiante;
+                    opcion.textContent = `${estudiante.Apellido}, ${estudiante.Nombre}`;
+                    selectorEstudiante.appendChild(opcion);
+                });
+                selectorEstudiante.disabled = false; 
+            } else {
+                 selectorEstudiante.innerHTML = '<option value="">No hay estudiantes en este grado</option>';
+            }
+        }
+    });
+});
 </script>
