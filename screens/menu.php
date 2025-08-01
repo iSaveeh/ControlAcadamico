@@ -1,5 +1,18 @@
 <?php
 session_start();
+
+// Redirigir si el usuario no está logueado
+if (!isset($_SESSION['usuario_id']) || empty($_SESSION['rol'])) {
+    header('Location: login.php');
+    exit();
+}
+
+// --- INICIO DEL BLOQUE INTEGRADO ---
+if (isset($_POST['action']) && $_POST['action'] === 'guardar_observacion') {
+    include '../mod/guardar_observacion.php';
+}
+// --- FIN DEL BLOQUE INTEGRADO ---
+
 $rol = $_SESSION['rol'] ?? '';
 $datos = $_SESSION['datos'] ?? [];
 ?>
@@ -13,8 +26,19 @@ $datos = $_SESSION['datos'] ?? [];
     <link rel="stylesheet" href="../css/general.css">
     <link rel="stylesheet" href="../css/menu.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <?php
+    // Cargar CSS del módulo dinámicamente si existe
+    $current_modulo_name = $_GET['mod'] ?? '';
+    if (!empty($current_modulo_name)) {
+        $css_modulo_path = '../css_modulos/' . basename($current_modulo_name) . '.css';
+        if (file_exists($css_modulo_path)) {
+            echo '<link rel="stylesheet" href="' . $css_modulo_path . '">';
+        }
+    }
+    ?>
 
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;1,400;1,700&display=swap" rel="stylesheet">
 </head>
 
@@ -88,13 +112,13 @@ $datos = $_SESSION['datos'] ?? [];
                     <img src="../assets/images/FocusGrade.png" alt="FocusGrade">
                 </div>
             </div>
-            </div>
+        </div>
 
         <div class="contenido-principal" id="contenido-principal">
             <?php
             if (isset($_GET['mod'])) {
-                $modulo = basename($_GET['mod']); // evita rutas fuera del proyecto
-                $archivo = '../mod/' . $modulo . '.php'; // Ruta corregida
+                $modulo = basename($_GET['mod']);
+                $archivo = '../mod/' . $modulo . '.php';
                 if (file_exists($archivo)) {
                     include $archivo;
                 } else {
@@ -108,5 +132,15 @@ $datos = $_SESSION['datos'] ?? [];
     </div>
 
     <script src="../js/menu.js"></script>
+    <?php
+    // Incluir JS específico del módulo si existe
+    $current_modulo_name = $_GET['mod'] ?? '';
+    if (!empty($current_modulo_name)) {
+        $js_modulo_path = '../js/' . basename($current_modulo_name) . '.js';
+        if (file_exists($js_modulo_path)) {
+            echo '<script src="' . $js_modulo_path . '"></script>';
+        }
+    }
+    ?>
 </body>
 </html>
