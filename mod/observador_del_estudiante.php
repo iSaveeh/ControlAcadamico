@@ -17,7 +17,7 @@ if ($result_profes) {
         $autores[$p['IDProfesor']] = $p['Nombre'] . ' ' . $p['Apellido'];
     }
 }
-$result_admins = $conexion->query("SELECT IDAdministrador, Nombre, Apellido FROM administrator");
+$result_admins = $conexion->query("SELECT IDAdministrador, Nombre, Apellido FROM administrador");
 if ($result_admins) {
     while ($a = $result_admins->fetch_assoc()) {
         $autores[$a['IDAdministrador']] = $a['Nombre'] . ' ' . $a['Apellido'];
