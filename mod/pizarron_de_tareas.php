@@ -98,7 +98,7 @@ try {
     <title>Pizarrón de Tareas - Focus Grade</title>
     <link rel="stylesheet" href="../css/general.css">
     <link rel="stylesheet" href="../css/menu.css">
-    <link rel="stylesheet" href="../css/pizarron.css">
+    <link rel="stylesheet" href="../css_modulos/pizarron.css">
 </head>
 <body>
     <div class="container">
