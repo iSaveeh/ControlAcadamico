@@ -2,10 +2,6 @@
 session_start();
 
 // Redirigir si el usuario no está logueado
-if (!isset($_SESSION['usuario_id']) || empty($_SESSION['rol'])) {
-    header('Location: login.php');
-    exit();
-}
 
 // --- INICIO DEL BLOQUE INTEGRADO ---
 if (isset($_POST['action']) && $_POST['action'] === 'guardar_observacion') {

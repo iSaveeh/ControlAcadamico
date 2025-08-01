@@ -2,7 +2,7 @@
 // En el futuro, aquí puedes cargar datos del profesor como sus materias y grados.
 ?>
 
-<link rel="stylesheet" href="../css/asistencia.css">
+<link rel="stylesheet" href="../css_modulos/asistencia.css">
 
 <div class="asistencia-container">
     <div class="asistencia-header">
