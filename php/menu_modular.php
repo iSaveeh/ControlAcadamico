@@ -24,6 +24,7 @@ $modulos = [
         'Boletines Académicos',
         'Horario de Clase',
         'Pizarrón de Tareas',
+        'Observador del Estudiante',
     ],
     'acudiente' => [
         'Boletines Académicos',

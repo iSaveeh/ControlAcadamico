@@ -7,6 +7,15 @@ if (!isset($_SESSION['usuario_id']) || empty($_SESSION['rol'])) { // Ajusta 'usu
     exit();
 }
 
+// --- INICIO DEL BLOQUE INTEGRADO ---
+// Este código revisa si se ha enviado un formulario para guardar una observación.
+if (isset($_POST['action']) && $_POST['action'] === 'guardar_observacion') {
+    // Si la acción es guardar, incluimos el script que lo hace.
+    // Como la sesión ya está activa, 'guardar_observacion.php' tendrá acceso a ella.
+    include '../mod/guardar_observacion.php';
+}
+// --- FIN DEL BLOQUE INTEGRADO ---
+
 $rol = $_SESSION['rol'] ?? '';
 $datos = $_SESSION['datos'] ?? [];
 ?>
@@ -17,32 +26,26 @@ $datos = $_SESSION['datos'] ?? [];
     <meta charset="UTF-8">
     <title>Plataforma Duver Freud FG</title>
 
-    <!-- Hojas de estilo -->
     <link rel="stylesheet" href="../css/general.css">
     <link rel="stylesheet" href="../css/menu.css">
 
     <?php
-// Incluir el CSS específico del módulo si existe
-// Asegúrate de que $modulo ya esté definido si se ha cargado un módulo
-$current_modulo_name = $_GET['mod'] ?? ''; // Obtener el nombre del módulo de la URL
-if (!empty($current_modulo_name)) {
-    $css_modulo_path = '../css_modulos/' . basename($current_modulo_name) . '.css';
-    if (file_exists($css_modulo_path)) {
-        echo '<link rel="stylesheet" href="' . $css_modulo_path . '">';
+    // carga CSS del módulo dinámicamente
+    $current_modulo_name = $_GET['mod'] ?? '';
+    if (!empty($current_modulo_name)) {
+        $css_modulo_path = '../css_modulos/' . basename($current_modulo_name) . '.css';
+        if (file_exists($css_modulo_path)) {
+            echo '<link rel="stylesheet" href="' . $css_modulo_path . '">';
+        }
     }
-}
-?>
-
+    ?>
     <!-- Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;1,400;1,700&display=swap" rel="stylesheet">
 </head>
 
 <body data-rol="<?= $_SESSION['rol'] ?>">
 
-    <!-- NAVBAR -->
     <div class="contenedor-navbar">
         <div class="navbar">
             <div class="logo-colegio-text">
@@ -79,7 +82,6 @@ if (!empty($current_modulo_name)) {
         </div>
     </div>
 
-    <!-- MODAL -->
     <div class="modal" id="modalCerrarSesion">
         <div class="modal-contenido">
             <h2>¿Estás seguro de cerrar sesión?</h2>
@@ -90,9 +92,7 @@ if (!empty($current_modulo_name)) {
         </div>
     </div>
 
-    <!-- AGRUPA TODO EN UN CONTENEDOR FLEXIBLE -->
     <div class="layout-container">
-        <!-- MENÚ LATERAL -->
         <div class="menu-lateral" id="menulateral">
             <div class="perfil-lateral">
                 <img src="../assets/icons/perfil.png" alt="Foto de perfil" class="foto-perfil">
@@ -106,21 +106,16 @@ if (!empty($current_modulo_name)) {
             </div>
 
             <div class="opciones-menu-lateral">
-                <!-- Boton cargado por JS -->
                 <button class="item-menu" id="btnMenu">
                     <i class="icono fas fa-sitemap"></i> Menú
                 </button>
 
-                <!-- Resto de enlaces normales -->
-
-                <!-- Logo Inferior -->
                 <div class="logo-inferior">
                     <img src="../assets/images/FocusGrade.png" alt="FocusGrade">
                 </div>
             </div>
         </div>
 
-        <!-- CONTENIDO PRINCIPAL -->
         <div class="contenido-principal" id="contenido-principal">
             <?php
                 if (isset($_GET['mod'])) {
@@ -138,7 +133,6 @@ if (!empty($current_modulo_name)) {
         </div>
     </div>
 
-    <!-- JS -->
     <script src="../js/menu.js"></script>
     <?php
         // Incluir el JS específico del módulo si existe
