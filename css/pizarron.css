@@ -1,0 +1,363 @@
+/* -- pizarron.css -- */
+
+/* Estilos generales para el contenedor principal del pizarrón */
+.pizarron-container {
+    background-color: #f8f9fa; /* Un blanco muy suave o gris claro para el fondo */
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra suave */
+    margin-top: 20px;
+}
+
+h1 {
+    color: #343a40; /* Texto oscuro para títulos */
+    margin-bottom: 25px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Botón "Nueva Tarea" --- */
+.btn-nueva-tarea {
+    background-color: #007bff; /* Azul primario */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-bottom: 25px;
+    display: inline-block; /* Para que margin-bottom funcione bien */
+}
+
+.btn-nueva-tarea:hover {
+    background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
+    transform: translateY(-2px); /* Pequeño efecto de levantamiento */
+}
+
+/* --- Estilos de la tabla --- */
+.actividades-table {
+    width: 100%;
+    border-collapse: collapse; /* Elimina el espacio entre celdas */
+    margin-top: 20px;
+    background-color: #ffffff; /* Fondo blanco para la tabla */
+    border-radius: 8px;
+    overflow: hidden; /* Para que los bordes redondeados se apliquen al contenido */
+}
+
+.actividades-table thead th {
+    background-color: #e9ecef; /* Gris claro para el encabezado */
+    color: #495057; /* Texto oscuro */
+    font-weight: bold;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6; /* Borde inferior para separar el encabezado */
+}
+
+.actividades-table tbody td {
+    padding: 15px;
+    border-bottom: 1px solid #e9ecef; /* Líneas de separación suaves */
+    color: #343a40; /* Color de texto para el cuerpo */
+}
+
+.actividades-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa; /* Rayado de tabla para mejor legibilidad */
+}
+
+.actividades-table tbody tr:hover {
+    background-color: #e2f2ff; /* Resaltado al pasar el ratón */
+}
+
+/* Ajustes para la última celda de acciones */
+.actividades-table td:last-child {
+    text-align: center;
+    white-space: nowrap; /* Evita que los botones se envuelvan */
+}
+
+/* --- Botones de acción dentro de la tabla (Editar/Borrar) --- */
+.btn-editar, .btn-borrar {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em;
+    margin: 0 4px; /* Espacio entre botones */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-editar {
+    background-color: #28a745; /* Verde para editar (success) */
+    color: white;
+}
+
+.btn-editar:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+}
+
+.btn-borrar {
+    background-color: #dc3545; /* Rojo para borrar (danger) */
+    color: white;
+}
+
+.btn-borrar:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+/* --- Estilos del Modal --- */
+.modal {
+  display: none; /* oculto por defecto */
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 32px 22px;
+  border-radius: 10px;
+  text-align: center;
+  width: 600px;         /* Más ancho */
+  max-width: 98vw;
+  min-width: 320px;
+  min-height: 320px;    /* Más corto verticalmente */
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+/* Cuando el modal tenga la clase 'mostrar', se muestra centrado */
+.modal.mostrar {
+  display: flex;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 32px;
+    font-weight: bold;
+    position: absolute; /* Posiciona el botón de cerrar */
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#modalTitle {
+    color: #343a40;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Estilos para el formulario dentro del modal --- */
+#formNuevaActividad label {
+    display: block; /* Cada label en su propia línea */
+    margin-bottom: 8px;
+    color: #495057;
+    font-weight: bold;
+    font-size: 0.95em;
+}
+
+#formNuevaActividad input[type="text"],
+#formNuevaActividad input[type="date"],
+#formNuevaActividad input[type="number"],
+#formNuevaActividad select,
+#formNuevaActividad textarea {
+    width: calc(100% - 20px); /* Ancho completo menos padding */
+    padding: 12px 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ced4da; /* Borde suave */
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit; /* Heredar fuente principal */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#formNuevaActividad input[type="text"]:focus,
+#formNuevaActividad input[type="date"]:focus,
+#formNuevaActividad input[type="number"]:focus,
+#formNuevaActividad select:focus,
+#formNuevaActividad textarea:focus {
+    border-color: #007bff; /* Borde azul al enfocar */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Sombra al enfocar */
+    outline: none; /* Eliminar el outline por defecto del navegador */
+}
+
+#formNuevaActividad textarea {
+    resize: vertical; /* Permitir redimensionar solo verticalmente */
+    min-height: 80px;
+}
+
+#formNuevaActividad #btnGuardarTarea {
+    background-color: #007bff; /* Azul para guardar */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    display: block; /* Botón de guardar ocupa todo el ancho */
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+#formNuevaActividad #btnGuardarTarea:hover {
+    background-color: #0056b3;
+}
+
+#formNuevaActividad #btnGuardarTarea:disabled {
+    background-color: #cccccc; /* Gris para deshabilitado */
+    cursor: not-allowed;
+}
+
+#mensajeFormulario {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 0.9em;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+/* --- Estilos específicos para el Modal de Confirmación --- */
+.modal-confirm {
+    max-width: 450px; /* Un poco más pequeño que el modal de tarea */
+    text-align: center;
+}
+
+.modal-confirm h2 {
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+.modal-confirm p {
+    margin-bottom: 30px;
+    font-size: 1.1em;
+    color: #495057;
+}
+
+.modal-confirm #activityNameToDelete {
+    font-weight: bold;
+    color: #007bff; /* Color para resaltar el nombre de la actividad */
+}
+
+.confirm-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Espacio entre los botones */
+    margin-top: 20px;
+}
+
+/* El btn-borrar ya tiene estilos, solo añadimos el de cancelar */
+.btn-cancelar {
+    background-color: #6c757d; /* Gris para cancelar */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-cancelar:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
+}
+
+/* Ajuste para el botón de cerrar del modal de confirmación */
+.confirm-close-button {
+    top: 5px; /* Más cerca de la esquina */
+    right: 10px;
+    font-size: 28px;
+    line-height: 28px;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.confirm-close-button:hover {
+    color: #333;
+}
+
+/* Responsividad básica */
+@media (max-width: 768px) {
+    .pizarron-container {
+        padding: 15px;
+    }
+
+    .actividades-table, .actividades-table thead, .actividades-table tbody, .actividades-table th, .actividades-table td, .actividades-table tr {
+        display: block; /* Hace que la tabla se comporte como bloques apilados */
+    }
+
+    .actividades-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px; /* Oculta el encabezado original */
+    }
+
+    .actividades-table tbody tr {
+        margin-bottom: 10px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        background-color: #ffffff;
+    }
+
+    .actividades-table tbody td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%; /* Espacio para el label */
+        text-align: right;
+    }
+
+    .actividades-table tbody td:before {
+        content: attr(data-label); /* Usa el atributo data-label para mostrar el nombre de la columna */
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+        color: #495057;
+    }
+
+    .actividades-table td:last-child {
+        text-align: center;
+        border-bottom: none;
+    }
+
+    .modal-content {
+        width: 92vw;
+        min-width: unset;
+        padding: 16px 5px;
+    }
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 500px) {
+    .modal-content {
+        width: 99vw;
+        padding: 8px 2px;
+    }
+}
+
+@media (max-width: 700px) {
+  .modal-content {
+    width: 98vw;
+    min-width: unset;
+    padding: 16px 5px;
+  }
+}
