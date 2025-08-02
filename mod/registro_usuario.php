@@ -42,6 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt2 = $conexion->prepare("INSERT INTO administrador (IDAdministrador, Usuario, Nombre, Apellido, Cargo) VALUES (?, ?, ?, ?, ?)");
             $stmt2->bind_param("sssss", $usuario, $usuario, $nombre, $apellido, $area);
             $stmt2->execute();
+        } elseif ($rol === 'acudiente') {
+            $idestudiante = $_POST['idestudiante'] ?? '';
+            $stmt2 = $conexion->prepare("INSERT INTO acudiente (Usuario, IDAcudiente, Nombre, Apellido, IDEstudiante) VALUES (?, ?, ?, ?, ?)");
+            $stmt2->bind_param("sssss", $usuario, $usuario, $nombre, $apellido, $idestudiante);
+            $stmt2->execute();
         }
         $mensaje = "Usuario registrado correctamente. Usuario: $usuario, Contraseña: $contrasena";
     } else {
@@ -56,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>Registro de Usuario</title>
     <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/registro_usuario.css">
     <style>
         form { max-width: 400px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 8px; }
         label { display: block; margin-top: 10px; }
@@ -69,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             document.getElementById('campos-estudiante').style.display = rol === 'estudiante' ? 'block' : 'none';
             document.getElementById('campos-profesor').style.display = rol === 'profesor' ? 'block' : 'none';
             document.getElementById('campos-administrador').style.display = rol === 'administrador' ? 'block' : 'none';
+            document.getElementById('campos-acudiente').style.display = rol === 'acudiente' ? 'block' : 'none';
         }
     </script>
 </head>
@@ -90,6 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <option value="estudiante">Estudiante</option>
                 <option value="profesor">Profesor</option>
                 <option value="administrador">Administrador</option>
+                <option value="acudiente">Acudiente</option>
             </select>
         </label>
         <label>Edad:
@@ -108,6 +116,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div id="campos-administrador" class="extra">
             <label>Área:
                 <input type="text" name="area">
+            </label>
+        </div>
+        <div id="campos-acudiente" class="extra">
+            <label>ID Estudiante a cargo:
+                <input type="text" name="idestudiante">
             </label>
         </div><br>
         <button type="submit">Registrar</button>
