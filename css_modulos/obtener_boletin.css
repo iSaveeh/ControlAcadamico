@@ -1,0 +1,227 @@
+.boletin-completo {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.boletin-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 20px;
+}
+
+.boletin-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.boletin-header h3 {
+    margin: 10px 0 0 0;
+    color: #666;
+    font-size: 18px;
+}
+
+.boletin-info {
+    margin-bottom: 30px;
+}
+
+.info-estudiante {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.campo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.promedio-general {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 20px;
+}
+
+.promedio-general.aprobado {
+    background: #d4edda;
+    color: #155724;
+}
+
+.promedio-general.reprobado {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.estado-final {
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 14px;
+}
+
+.estado-final.aprobado {
+    background: #d4edda;
+    color: #155724;
+}
+
+.estado-final.reprobado {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.tabla-materias-container {
+    margin-bottom: 30px;
+}
+
+.tabla-materias-container h4 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.tabla-materias {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
+.tabla-materias th,
+.tabla-materias td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.tabla-materias th {
+    background: #f8f9fa;
+    font-weight: bold;
+}
+
+.nota-materia {
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 15px;
+}
+
+.nota-materia.aprobado {
+    background: #d4edda;
+    color: #155724;
+}
+
+.nota-materia.reprobado {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.estado-materia {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 10px;
+}
+
+.estado-materia.aprobado {
+    background: #d4edda;
+    color: #155724;
+}
+
+.estado-materia.reprobado {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.no-notas {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+
+.resumen-academico {
+    margin-bottom: 30px;
+}
+
+.resumen-academico h4 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.resumen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.resumen-item {
+    text-align: center;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.resumen-item .numero {
+    display: block;
+    font-size: 28px;
+    font-weight: bold;
+    color: #4facfe;
+    margin-bottom: 5px;
+}
+
+.resumen-item .label {
+    font-size: 12px;
+    color: #666;
+    font-weight: 600;
+}
+
+.observaciones {
+    margin-bottom: 30px;
+    background: #fff3cd;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ffeaa7;
+}
+
+.observaciones h4 {
+    margin-top: 0;
+    color: #856404;
+}
+
+.observaciones p {
+    margin-bottom: 0;
+    color: #856404;
+}
+
+.boletin-footer {
+    text-align: center;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+@media print {
+    .boletin-completo {
+        padding: 0;
+    }
+    
+    .boletin-header {
+        border-bottom: 2px solid #000;
+    }
+    
+    .info-estudiante {
+        background: white !important;
+        border: 1px solid #000;
+    }
+    
+    .tabla-materias th,
+    .tabla-materias td {
+        border: 1px solid #000;
+    }
+}

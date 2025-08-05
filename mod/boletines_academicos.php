@@ -1,230 +1,263 @@
 <?php
-// filepath: modular-menu-php/mod/boletines_academicos.php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+include '../backend/conexion.php';
+
+$rol = $_SESSION['rol'] ?? '';
+$idAcudiente = $_SESSION['id'] ?? null;
+
+// Filtros
+$periodo = $_GET['periodo'] ?? '';
+$grado = $_GET['grado'] ?? '';
+$estudiante = $_GET['estudiante'] ?? '';
+
+// Acción para generar boletín
+if (isset($_POST['generar_boletin'])) {
+    $estudianteId = $_POST['estudiante_id'];
+    $periodoId = $_POST['periodo_id'];
+
+    $promedioQuery = "
+        SELECT AVG(NotaFinal) as promedio 
+        FROM notas 
+        WHERE IDEstudiante = ? AND IDPeriodo = ?
+    ";
+    $stmt = $conexion->prepare($promedioQuery);
+    $stmt->bind_param("ii", $estudianteId, $periodoId);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    $promedio = $resultado->fetch_assoc()['promedio'] ?? 0;
+
+    $estado = $promedio >= 3.0 ? 'Aprobado' : 'Reprobado';
+
+    $insertBoletin = "
+        INSERT INTO boletin (IDEstudiante, IDPeriodo, PromedioGeneral, Estado) 
+        VALUES (?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+        PromedioGeneral = VALUES(PromedioGeneral),
+        Estado = VALUES(Estado),
+        FechaGeneracion = NOW()
+    ";
+    $stmt = $conexion->prepare($insertBoletin);
+    $stmt->bind_param("iids", $estudianteId, $periodoId, $promedio, $estado);
+    $stmt->execute();
+
+    $mensaje = "Boletín generado correctamente";
 }
 
-// Verificar si el usuario ha iniciado sesión
-if (!isset($_SESSION['usuario'])) {
-    header('Location: ../screens/login.php');
-    exit();
+// Filtro según rol
+$where = "WHERE 1=1";
+
+if ($rol === 'acudiente' && $idAcudiente) {
+    $where .= " AND e.IDAcudiente = " . intval($idAcudiente);
 }
 
-// Conexión a la base de datos
-require_once '../backend/conexion.php';
-
-// Verificar si el usuario es administrador
-$es_admin = false;
-$stmt_rol = $conexion->prepare("SELECT rol FROM usuarios WHERE usuario = ?");
-$stmt_rol->bind_param("s", $_SESSION['usuario']);
-$stmt_rol->execute();
-$stmt_rol->bind_result($rol_usuario);
-$stmt_rol->fetch();
-$stmt_rol->close();
-if ($rol_usuario === 'administrador') {
-    $es_admin = true;
+if (!empty($periodo)) $where .= " AND p.IDPeriodo = " . intval($periodo);
+if (!empty($grado)) $where .= " AND g.IDGrado = " . intval($grado);
+if (!empty($estudiante)) {
+    $estudiante = $conexion->real_escape_string($estudiante);
+    $where .= " AND (e.Nombre LIKE '%$estudiante%' OR e.Apellido LIKE '%$estudiante%')";
 }
 
-if ($es_admin) {
-    // Consulta para obtener todos los estudiantes con grado y salón
-    $sql = "SELECT e.IDEstudiante, e.Nombre, e.Apellido, g.NombreGrado, s.NombreSalon
-            FROM estudiante e
-            LEFT JOIN grados g ON e.IDGrado = g.IDGrado
-            LEFT JOIN salon s ON e.IDSalon = s.IDSalon
-            ORDER BY g.NombreGrado, s.NombreSalon, e.Apellido, e.Nombre";
-    $result = $conexion->query($sql);
-    ?>
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>Listado de Estudiantes</title>
-        <link rel="stylesheet" href="../css/general.css">
-        <link rel="stylesheet" href="../css/menu.css">
-        <style>
-            .tabla-estudiantes {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 24px;
-                background: #fff;
-            }
-            .tabla-estudiantes th, .tabla-estudiantes td {
-                border: 1px solid #e2e6ea;
-                padding: 10px 8px;
-                text-align: center;
-            }
-            .tabla-estudiantes th {
-                background: #f4f6fa;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="contenedor">
-            <h1>Listado de Estudiantes por Grado y Salón</h1>
-            <table class="tabla-estudiantes">
-                <thead>
-                    <tr>
-                        <!-- <th>ID Estudiante</th> --> <!-- Eliminado -->
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Grado</th>
-                        <th>Salón</th>
-                        <th>Boletín</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($result->num_rows > 0): ?>
-                        <?php while ($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <!-- <td><?= htmlspecialchars($row['IDEstudiante']) ?></td> --> <!-- Eliminado -->
-                                <td><?= htmlspecialchars($row['Nombre']) ?></td>
-                                <td><?= htmlspecialchars($row['Apellido']) ?></td>
-                                <td><?= htmlspecialchars($row['NombreGrado']) ?></td>
-                                <td><?= htmlspecialchars($row['NombreSalon']) ?></td>
-                                <td>
-                                    <form method="get" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" style="margin:0;">
-                                        <input type="hidden" name="idestudiante" value="<?= htmlspecialchars($row['IDEstudiante']) ?>">
-                                        <button type="submit" style="padding:6px 14px; background:#2575fc; color:#fff; border:none; border-radius:5px; cursor:pointer;">
-                                            Ver Boletín
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="5">No hay estudiantes registrados.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-    </body>
-    </html>
-    <?php
-    exit();
-}
+$sql = "
+SELECT DISTINCT
+    e.IDEstudiante,
+    CONCAT(e.Nombre, ' ', e.Apellido) AS NombreCompleto,
+    g.NombreGrado,
+    p.IDPeriodo,
+    p.NombrePeriodo,
+    b.IDBoletin,
+    b.PromedioGeneral,
+    b.Estado,
+    b.FechaGeneracion
+FROM estudiante e
+JOIN grados g ON e.IDGrado = g.IDGrado
+CROSS JOIN periodos p
+LEFT JOIN boletin b ON e.IDEstudiante = b.IDEstudiante AND p.IDPeriodo = b.IDPeriodo
+$where
+ORDER BY g.IDGrado, e.Apellido, e.Nombre, p.IDPeriodo
+";
 
-// Obtener el ID del estudiante (puede venir por GET o por sesión)
-$id_estudiante = $_GET['idestudiante'] ?? $_SESSION['idestudiante'] ?? null;
-
-if (!$id_estudiante) {
-    echo "<p>No se ha especificado el estudiante.</p>";
-    exit();
-}
-
-// Consulta para obtener los boletines del estudiante
-$sql = "SELECT IDPeriodo, IDAsignatura, IDEstudiante, IDAdministrador, PromedioCalificaciones, PromedioAcumulado 
-        FROM boletin 
-        WHERE IDEstudiante = ?";
-$stmt = $conexion->prepare($sql); // Cambiado $conn por $conexion
-$stmt->bind_param("s", $id_estudiante);
-$stmt->execute();
-$result = $stmt->get_result();
+$resultado = $conexion->query($sql);
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Boletines Académicos</title>
-    <link rel="stylesheet" href="../css/general.css">
-    <link rel="stylesheet" href="../css/menu.css">
-    <style>
-        .tabla-boletin {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 24px;
-            background: #fff;
-        }
-        .tabla-boletin th, .tabla-boletin td {
-            border: 1px solid #e2e6ea;
-            padding: 10px 8px;
-            text-align: center;
-        }
-        .tabla-boletin th {
-            background: #f4f6fa;
-        }
-    </style>
-</head>
-<body>
-    <div class="contenedor">
-        <h1>Boletines Académicos</h1>
-        
-        <?php if ($es_admin): ?>
-            <a href="boletines_academicos.php" style="margin-bottom:15px;display:inline-block;">← Volver al listado de estudiantes</a>
-        <?php endif; ?>
-        
+<link rel="stylesheet" href="../css_modulos/boletin.css">
+
+<div class="boletin-container">
+    <h2>📋 Gestión de Boletines</h2>
+
+    <?php if (isset($mensaje)): ?>
+        <div class="mensaje-exito">✅ <?= $mensaje ?></div>
+    <?php endif; ?>
+
+    <div class="filtros-card">
+        <form method="GET" action="menu.php" class="filtros-form">
+            <input type="hidden" name="mod" value="boletin">
+
+            <div class="filtro-grupo">
+                <label>🔍 Buscar Estudiante:</label>
+                <input type="text" name="estudiante" placeholder="Nombre o apellido..." 
+                       value="<?= htmlspecialchars($estudiante) ?>">
+            </div>
+
+            <div class="filtro-grupo">
+                <label>🎓 Grado:</label>
+                <select name="grado">
+                    <option value="">Todos los grados</option>
+                    <?php
+                    $grados = $conexion->query("SELECT IDGrado, NombreGrado FROM grados ORDER BY IDGrado");
+                    while ($g = $grados->fetch_assoc()):
+                    ?>
+                        <option value="<?= $g['IDGrado'] ?>" <?= ($grado == $g['IDGrado']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($g['NombreGrado']) ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+
+            <div class="filtro-grupo">
+                <label>📅 Periodo:</label>
+                <select name="periodo">
+                    <option value="">Todos los periodos</option>
+                    <?php
+                    $periodos = $conexion->query("SELECT IDPeriodo, NombrePeriodo FROM periodos ORDER BY IDPeriodo");
+                    while ($p = $periodos->fetch_assoc()):
+                    ?>
+                        <option value="<?= $p['IDPeriodo'] ?>" <?= ($periodo == $p['IDPeriodo']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($p['NombrePeriodo']) ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+
+            <div class="filtro-acciones">
+                <button type="submit" class="btn-filtrar">🔍 Filtrar</button>
+                <a href="menu.php?mod=boletin" class="btn-limpiar">🗑️ Limpiar</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="tabla-container">
         <table class="tabla-boletin">
             <thead>
                 <tr>
-                    <th>IDPeriodo</th>
-                    <th>IDAsignatura</th>
-                    <th>IDEstudiante</th>
-                    <th>IDAdministrador</th>
-                    <th>PromedioCalificaciones</th>
-                    <th>PromedioAcumulado</th>
+                    <th>👨‍🎓 Estudiante</th>
+                    <th>🎓 Grado</th>
+                    <th>📅 Periodo</th>
+                    <th>📊 Promedio</th>
+                    <th>✅ Estado</th>
+                    <th>📋 Boletín</th>
+                    <th>⚙️ Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <?php if ($result->num_rows > 0): ?>
-                    <?php while ($row = $result->fetch_assoc()): ?>
+                <?php if ($resultado && $resultado->num_rows > 0): ?>
+                    <?php while ($fila = $resultado->fetch_assoc()): ?>
                         <tr>
-                            <td><?= htmlspecialchars($row['IDPeriodo']) ?></td>
-                            <td><?= htmlspecialchars($row['IDAsignatura']) ?></td>
-                            <td><?= htmlspecialchars($row['IDEstudiante']) ?></td>
-                            <td><?= htmlspecialchars($row['IDAdministrador']) ?></td>
-                            <td><?= htmlspecialchars($row['PromedioCalificaciones']) ?></td>
-                            <td><?= htmlspecialchars($row['PromedioAcumulado']) ?></td>
+                            <td>
+                                <div class="estudiante-info">
+                                    <strong><?= htmlspecialchars($fila['NombreCompleto']) ?></strong>
+                                    <small>ID: <?= $fila['IDEstudiante'] ?></small>
+                                </div>
+                            </td>
+                            <td><?= htmlspecialchars($fila['NombreGrado']) ?></td>
+                            <td><?= htmlspecialchars($fila['NombrePeriodo']) ?></td>
+                            <td>
+                                <?php if ($fila['PromedioGeneral']): ?>
+                                    <span class="promedio <?= ($fila['PromedioGeneral'] >= 3.0) ? 'aprobado' : 'reprobado' ?>">
+                                        <?= number_format($fila['PromedioGeneral'], 2) ?>
+                                    </span>
+                                <?php else: ?>
+                                    <span class="sin-notas">Sin notas</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if ($fila['Estado']): ?>
+                                    <span class="estado <?= strtolower($fila['Estado']) ?>">
+                                        <?= $fila['Estado'] ?>
+                                    </span>
+                                <?php else: ?>
+                                    <span class="pendiente">Pendiente</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if ($fila['IDBoletin']): ?>
+                                    <span class="generado">✅ Generado</span>
+                                    <small><?= date('d/m/Y', strtotime($fila['FechaGeneracion'])) ?></small>
+                                <?php else: ?>
+                                    <span class="no-generado">❌ No generado</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <div class="acciones-grupo">
+                                    <?php if (!$fila['IDBoletin']): ?>
+                                        <button class="btn-generar" 
+                                            onclick="generarBoletin(<?= $fila['IDEstudiante'] ?>, <?= $fila['IDPeriodo'] ?>, '<?= addslashes($fila['NombreCompleto']) ?>')">
+                                            📋 Generar
+                                        </button>
+                                    <?php else: ?>
+                                        <button class="btn-ver" onclick="verBoletin(<?= $fila['IDBoletin'] ?>)">👁️ Ver</button>
+                                        <button class="btn-imprimir" onclick="imprimirBoletin(<?= $fila['IDBoletin'] ?>)">🖨️ Imprimir</button>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6">No hay boletines registrados para este estudiante.</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-
-        <?php
-        // Consulta para obtener las notas del estudiante
-        $sql_notas = "SELECT n.IDNota, n.IDAsignatura, a.NombreAsignatura, n.NotaFinal, n.Observaciones, n.FechaRegistro
-                      FROM notas n
-                      LEFT JOIN asignaturas a ON n.IDAsignatura = a.IDAsignatura
-                      WHERE n.IDEstudiante = ?";
-        $stmt_notas = $conexion->prepare($sql_notas);
-        $stmt_notas->bind_param("s", $id_estudiante);
-        $stmt_notas->execute();
-        $result_notas = $stmt_notas->get_result();
-        ?>
-
-        <h2>Notas del Estudiante</h2>
-        <table class="tabla-boletin">
-            <thead>
-                <tr>
-                    <th>Asignatura</th>
-                    <th>Nota Final</th>
-                    <th>Observaciones</th>
-                    <th>Fecha de Registro</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if ($result_notas->num_rows > 0): ?>
-                    <?php while ($nota = $result_notas->fetch_assoc()): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($nota['NombreAsignatura'] ?? 'Sin asignatura') ?></td>
-                            <td><?= htmlspecialchars($nota['NotaFinal']) ?></td>
-                            <td><?= htmlspecialchars($nota['Observaciones']) ?></td>
-                            <td><?= htmlspecialchars($nota['FechaRegistro']) ?></td>
-                        </tr>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="4">No hay notas registradas para este estudiante.</td>
+                        <td colspan="7" class="no-datos">
+                            <div class="mensaje-vacio">
+                                <span>📋</span>
+                                <p>No se encontraron registros</p>
+                            </div>
+                        </td>
                     </tr>
                 <?php endif; ?>
             </tbody>
         </table>
     </div>
-</body>
-</html>
+</div>
+
+<!-- Modales y scripts (puedes mantener los mismos) -->
+<script>
+function generarBoletin(estudianteId, periodoId, nombreEstudiante) {
+    document.getElementById('estudianteId').value = estudianteId;
+    document.getElementById('periodoId').value = periodoId;
+    document.getElementById('nombreEstudiante').textContent = nombreEstudiante;
+    document.getElementById('modalGenerar').style.display = 'block';
+}
+function verBoletin(boletinId) {
+    fetch(`../backend/obtener_boletin.php?id=${boletinId}`)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('contenidoBoletin').innerHTML = html;
+            document.getElementById('modalVerBoletin').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al cargar el boletín');
+        });
+}
+function imprimirBoletin(boletinId) {
+    window.open(`../backend/imprimir_boletin.php?id=${boletinId}`, '_blank');
+}
+function imprimirBoletinModal() {
+    const contenido = document.getElementById('contenidoBoletin').innerHTML;
+    const ventana = window.open('', '_blank');
+    ventana.document.write(`
+        <html>
+            <head><title>Boletín de Calificaciones</title></head>
+            <body>${contenido}</body>
+        </html>
+    `);
+    ventana.document.close();
+    ventana.print();
+}
+function cerrarModal() {
+    document.getElementById('modalGenerar').style.display = 'none';
+}
+function cerrarModalVer() {
+    document.getElementById('modalVerBoletin').style.display = 'none';
+}
+window.onclick = function(event) {
+    if (event.target === document.getElementById('modalGenerar')) cerrarModal();
+    if (event.target === document.getElementById('modalVerBoletin')) cerrarModalVer();
+}
+</script>

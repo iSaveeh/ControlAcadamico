@@ -11,6 +11,28 @@ if (isset($_POST['action']) && $_POST['action'] === 'guardar_observacion') {
 
 $rol = $_SESSION['rol'] ?? '';
 $datos = $_SESSION['datos'] ?? [];
+
+// Función para obtener la imagen según el rol
+function obtenerImagenPorRol($rol) {
+    $imagenes_rol = [
+        'admin' => '../assets/icons/admin.png',
+        'profesor' => '../assets/icons/profesor.png',
+        'estudiante' => '../assets/icons/estudiante.png',
+        'acudiente' => '../assets/icons/acudiente.png'
+    ];
+    
+    $rol_lower = strtolower($rol);
+    
+    // Verificar si existe la imagen específica del rol
+    if (isset($imagenes_rol[$rol_lower]) && file_exists($imagenes_rol[$rol_lower])) {
+        return $imagenes_rol[$rol_lower];
+    }
+    
+    // Imagen por defecto si no existe la específica del rol
+    return '../assets/icons/perfil.png';
+}
+
+$imagen_usuario = obtenerImagenPorRol($rol);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -61,7 +83,7 @@ $datos = $_SESSION['datos'] ?? [];
                 <div class="separador"></div>
 
                 <button class="btn-navbar">
-                    <img src="../assets/icons/perfil.png" class="icono-navbar" alt="Perfil">
+                    <img src="<?= $imagen_usuario ?>" class="icono-navbar" alt="Perfil <?= ucfirst($rol) ?>">
                     <span class="texto-navbar perfil-usuario">
                         <?= ($datos['Nombre'] ?? '') . ' ' . ($datos['Apellido'] ?? '') ?>
                     </span>
@@ -89,7 +111,7 @@ $datos = $_SESSION['datos'] ?? [];
     <div class="layout-container">
         <div class="menu-lateral" id="menulateral">
             <div class="perfil-lateral">
-                <img src="../assets/icons/perfil.png" alt="Foto de perfil" class="foto-perfil">
+                <img src="<?= $imagen_usuario ?>" alt="Foto de perfil <?= ucfirst($rol) ?>" class="foto-perfil">
                 <div class="info-usuario">
                     <h3><?= ($datos['Nombre'] ?? '') . ' ' . ($datos['Apellido'] ?? '') ?></h3>
                     <span class="rol"><?= ucfirst($rol) ?></span>

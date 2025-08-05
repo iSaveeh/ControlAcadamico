@@ -1,20 +1,33 @@
 <?php
-// No debe haber session_start() aquí
+require_once '../backend/conexion.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-if (!isset($_SESSION['id']) || $_SESSION['rol'] !== 'profesor') {
+$usuario = $_SESSION['usuario'] ?? '';
+$rol = $_SESSION['rol'] ?? '';
+
+if ($rol !== 'profesor') {
     header('Location: ../screens/login.php');
     exit();
 }
 
-require_once '../backend/conexion.php';
-
-$id_profesor_logueado = $_SESSION['id'];
+// Obtener el IDProfesor desde la tabla profesor usando el campo Usuario
+$id_profesor_logueado = null;
+$stmt = $conexion->prepare("SELECT IDProfesor FROM profesor WHERE Usuario = ?");
+$stmt->bind_param("s", $usuario);
+$stmt->execute();
+$stmt->bind_result($id_profesor);
+if ($stmt->fetch()) {
+    $id_profesor_logueado = $id_profesor;
+}
+$stmt->close();
 
 $actividades = [];
-$asignaturas_profesor = []; // Nuevo array para las asignaturas del profesor
+$asignaturas_profesor = [];
 
-// Lógica para obtener las actividades del profesor desde la base de datos
-try {
+if ($id_profesor_logueado !== null) {
+    // Obtener actividades del profesor
     $query_actividades = "
         SELECT
             A.IDActividad,
@@ -23,73 +36,37 @@ try {
             A.Descripcion,
             A.Fecha,
             A.Porcentaje
-        FROM
-            actividades AS A
-        JOIN
-            asignaturas AS Asig ON A.IDAsignatura = Asig.IDAsignatura
-        WHERE
-            Asig.IDProfesor = ?
-        ORDER BY
-            A.Fecha DESC
+        FROM actividades AS A
+        JOIN asignaturas AS Asig ON A.IDAsignatura = Asig.IDAsignatura
+        WHERE Asig.IDProfesor = ?
+        ORDER BY A.Fecha DESC
     ";
-
     $stmt_actividades = $conexion->prepare($query_actividades);
-
-    if ($stmt_actividades === false) {
-        throw new Exception("Error al preparar la consulta de actividades: " . $conexion->error);
-    }
-
     $stmt_actividades->bind_param("i", $id_profesor_logueado);
     $stmt_actividades->execute();
     $resultado_actividades = $stmt_actividades->get_result();
-
-    if ($resultado_actividades) {
-        while ($row = $resultado_actividades->fetch_assoc()) {
-            $actividades[] = $row;
-        }
-        $resultado_actividades->free();
+    while ($row = $resultado_actividades->fetch_assoc()) {
+        $actividades[] = $row;
     }
     $stmt_actividades->close();
 
-    // --- NUEVA LÓGICA PARA OBTENER LAS ASIGNATURAS DEL PROFESOR ---
+    // Obtener asignaturas del profesor
     $query_asignaturas = "
-        SELECT
-            IDAsignatura,
-            NombreAsignatura
-        FROM
-            asignaturas
-        WHERE
-            IDProfesor = ?
-        ORDER BY
-            NombreAsignatura ASC
+        SELECT IDAsignatura, NombreAsignatura
+        FROM asignaturas
+        WHERE IDProfesor = ?
+        ORDER BY NombreAsignatura ASC
     ";
-
     $stmt_asignaturas = $conexion->prepare($query_asignaturas);
-
-    if ($stmt_asignaturas === false) {
-        throw new Exception("Error al preparar la consulta de asignaturas: " . $conexion->error);
-    }
-
     $stmt_asignaturas->bind_param("i", $id_profesor_logueado);
     $stmt_asignaturas->execute();
     $resultado_asignaturas = $stmt_asignaturas->get_result();
-
-    if ($resultado_asignaturas) {
-        while ($row = $resultado_asignaturas->fetch_assoc()) {
-            $asignaturas_profesor[] = $row;
-        }
-        $resultado_asignaturas->free();
+    while ($row = $resultado_asignaturas->fetch_assoc()) {
+        $asignaturas_profesor[] = $row;
     }
     $stmt_asignaturas->close();
-
-} catch (Exception $e) {
-    echo "<p style='color: red; font-weight: bold;'>Error al cargar datos: " . htmlspecialchars($e->getMessage()) . "</p>";
-    $actividades = [];
-    $asignaturas_profesor = [];
 }
-// Fin de la lógica PHP
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -105,7 +82,7 @@ try {
         <div class="pizarron-container">
             <h1>Pizarrón de Tareas</h1>
 
-            <button type="button" id="btnNuevaTarea" class="btn-nueva-tarea">Nueva Tarea</button>
+            <button type="button" id="btnNuevaTarea" class="btn-nueva-tarea">➕ Nueva Tarea</button>
 
             <?php if (empty($actividades)): ?>
                 <p>No hay actividades registradas para tus asignaturas.</p>
@@ -125,17 +102,15 @@ try {
                     <tbody>
                         <?php foreach ($actividades as $actividad): ?>
                             <tr>
-                                <td data-label="ID"><?php echo htmlspecialchars($actividad['IDActividad']); ?></td>
-                                <td data-label="Asignatura"><?php echo htmlspecialchars($actividad['NombreAsignatura']); ?></td>
-                                <td data-label="Actividad"><?php echo htmlspecialchars($actividad['NombreActividad']); ?></td>
-                                <td data-label="Descripción"><?php echo htmlspecialchars($actividad['Descripcion']); ?></td>
-                                <td data-label="Fecha de Entrega"><?php echo htmlspecialchars($actividad['Fecha']); ?></td>
-                                <td data-label="Porcentaje"><?php echo htmlspecialchars(number_format($actividad['Porcentaje'], 2)) . '%'; ?></td>
-                                <td data-label="Acciones">
-                                    <button type="button" class="btn-editar" data-id="<?php echo htmlspecialchars($actividad['IDActividad']); ?>">Editar</button>
-                                    <button type="button" class="btn-borrar" data-id="<?php echo htmlspecialchars($actividad['IDActividad']); ?>">
-      Borrar
-    </button>
+                                <td><?php echo htmlspecialchars($actividad['IDActividad']); ?></td>
+                                <td><?php echo htmlspecialchars($actividad['NombreAsignatura']); ?></td>
+                                <td><?php echo htmlspecialchars($actividad['NombreActividad']); ?></td>
+                                <td><?php echo htmlspecialchars($actividad['Descripcion']); ?></td>
+                                <td><?php echo htmlspecialchars($actividad['Fecha']); ?></td>
+                                <td><?php echo htmlspecialchars(number_format($actividad['Porcentaje'], 2)) . '%'; ?></td>
+                                <td>
+                                    <button type="button" class="btn-editar" data-id="<?php echo $actividad['IDActividad']; ?>">✏️ Editar</button>
+                                    <button type="button" class="btn-borrar" data-id="<?php echo $actividad['IDActividad']; ?>">🗑️ Borrar</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -144,33 +119,35 @@ try {
             <?php endif; ?>
         </div>
 
+        <!-- Modal Nueva Tarea -->
         <div id="modalNuevaTarea" class="modal">
             <div class="modal-content">
                 <span class="close-button">&times;</span>
                 <h2 id="modalTitle">Nueva Actividad</h2>
                 <form id="formNuevaActividad">
                     <input type="hidden" id="idActividad" name="idActividad">
+
                     <label for="nombreActividad">Nombre de la Actividad:</label>
-                    <input type="text" id="nombreActividad" name="nombreActividad" required><br><br>
+                    <input type="text" id="nombreActividad" name="nombreActividad" required>
 
                     <label for="descripcion">Descripción:</label>
-                    <textarea id="descripcion" name="descripcion" rows="4"></textarea><br><br>
+                    <textarea id="descripcion" name="descripcion" rows="4"></textarea>
 
                     <label for="idAsignatura">Asignatura:</label>
                     <select id="idAsignatura" name="idAsignatura" required>
                         <option value="">Seleccione una asignatura</option>
                         <?php foreach ($asignaturas_profesor as $asignatura): ?>
-                            <option value="<?php echo htmlspecialchars($asignatura['IDAsignatura']); ?>">
-                                <?php echo htmlspecialchars($asignatura['NombreAsignatura']); ?>
+                            <option value="<?= $asignatura['IDAsignatura'] ?>">
+                                <?= htmlspecialchars($asignatura['NombreAsignatura']) ?>
                             </option>
                         <?php endforeach; ?>
-                    </select><br><br>
+                    </select>
 
-                    <label for="fecha">Fecha de Entrega (YYYY-MM-DD):</label>
-                    <input type="date" id="fecha" name="fecha" required><br><br>
+                    <label for="fecha">Fecha de Entrega:</label>
+                    <input type="date" id="fecha" name="fecha" required>
 
                     <label for="porcentaje">Porcentaje (%):</label>
-                    <input type="number" id="porcentaje" name="porcentaje" min="0" max="100" step="0.01" required><br><br>
+                    <input type="number" id="porcentaje" name="porcentaje" min="0" max="100" step="0.01" required>
 
                     <button type="submit" id="btnGuardarTarea">Guardar Tarea</button>
                 </form>
@@ -182,15 +159,16 @@ try {
         <div id="confirmDeleteModal" class="modal">
             <div class="modal-content modal-confirm">
                 <span class="close-button confirm-close-button">&times;</span>
-                <h2 id="confirmDeleteTitle">Confirmar Eliminación</h2>
-                <p>¿Estás seguro de que deseas eliminar la actividad "<span id="activityNameToDelete"></span>"?</p>
+                <h2>Confirmar Eliminación</h2>
+                <p>¿Estás seguro de eliminar la actividad "<span id="activityNameToDelete"></span>"?</p>
                 <div class="confirm-buttons">
                     <button type="button" id="btnConfirmDelete" class="btn-borrar">Sí, Eliminar</button>
                     <button type="button" id="btnCancelDelete" class="btn-cancelar">Cancelar</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script src="../js/pizarron_de_tareas.js"></script>
-    </body>
+    <script src="../js/pizarron_de_tareas.js"></script>
+</body>
 </html>

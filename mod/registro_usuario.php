@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>Registro de Usuario</title>
     <link rel="stylesheet" href="../css/general.css">
-    <link rel="stylesheet" href="../css/registro_usuario.css">
+    <link rel="stylesheet" href="../css_modulos/registro_usuario.css">
     <style>
         form { max-width: 400px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 8px; }
         label { display: block; margin-top: 10px; }

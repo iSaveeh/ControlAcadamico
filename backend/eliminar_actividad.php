@@ -5,11 +5,6 @@ error_reporting(E_ALL);
 session_start();
 header('Content-Type: application/json');
 
-// Verificar si el usuario está logueado y es un profesor
-if (!isset($_SESSION['id']) || $_SESSION['rol'] !== 'profesor') {
-    echo json_encode(['success' => false, 'message' => 'Acceso no autorizado.']);
-    exit();
-}
 
 require_once 'conexion.php'; // Asegúrate que este archivo también no tenga salida extra
 

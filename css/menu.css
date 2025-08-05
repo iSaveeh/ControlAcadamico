@@ -2,7 +2,7 @@
 .contenedor-navbar {
     width: 100%;
     height: 80px;
-    background-color: #587DA3;
+    background-color: #587DA3; /* Color por defecto */
     padding: 8px 16px;
     box-sizing: border-box;
     border-bottom: 2px solid #2c3e50;
@@ -10,6 +10,108 @@
     top: 0;
     left: 0;
     z-index: 1000;
+}
+
+/* === COLORES DINÁMICOS POR ROL === */
+/* Administrador */
+body[data-rol="administrador"] .contenedor-navbar {
+    background-color: #587DA3;
+}
+
+body[data-rol="administrador"] a.btn-opcion {
+    border-color: #3A5A7A;
+}
+
+body[data-rol="administrador"] a.btn-opcion:hover {
+    background-color: #587DA3;
+}
+
+/* Profesor */
+body[data-rol="profesor"] .contenedor-navbar {
+    background-color: #BC5555;
+}
+
+body[data-rol="profesor"] a.btn-opcion {
+    border-color: #8B3333;
+}
+
+body[data-rol="profesor"] a.btn-opcion:hover {
+    background-color: #BC5555;
+}
+
+/* Estudiante */
+body[data-rol="estudiante"] .contenedor-navbar {
+    background-color: #D79650;
+}
+
+body[data-rol="estudiante"] a.btn-opcion {
+    border-color: #B8732A;
+}
+
+body[data-rol="estudiante"] a.btn-opcion:hover {
+    background-color: #D79650;
+}
+
+/* Acudiente */
+body[data-rol="acudiente"] .contenedor-navbar {
+    background-color: #FED287;
+}
+
+body[data-rol="acudiente"] a.btn-opcion {
+    border-color: #E6B955;
+}
+
+body[data-rol="acudiente"] a.btn-opcion:hover {
+    background-color: #FED287;
+}
+
+/* También aplicar colores en mayúsculas por si acaso */
+body[data-rol="Administrador"] .contenedor-navbar {
+    background-color: #587DA3;
+}
+
+body[data-rol="Administrador"] a.btn-opcion {
+    border-color: #3A5A7A;
+}
+
+body[data-rol="Administrador"] a.btn-opcion:hover {
+    background-color: #587DA3;
+}
+
+body[data-rol="Profesor"] .contenedor-navbar {
+    background-color: #BC5555;
+}
+
+body[data-rol="Profesor"] a.btn-opcion {
+    border-color: #8B3333;
+}
+
+body[data-rol="Profesor"] a.btn-opcion:hover {
+    background-color: #BC5555;
+}
+
+body[data-rol="Estudiante"] .contenedor-navbar {
+    background-color: #D79650;
+}
+
+body[data-rol="Estudiante"] a.btn-opcion {
+    border-color: #B8732A;
+}
+
+body[data-rol="Estudiante"] a.btn-opcion:hover {
+    background-color: #D79650;
+}
+
+body[data-rol="Acudiente"] .contenedor-navbar {
+    background-color: #FED287;
+}
+
+body[data-rol="Acudiente"] a.btn-opcion {
+    border-color: #E6B955;
+}
+
+body[data-rol="Acudiente"] a.btn-opcion:hover {
+    background-color: #FED287;
 }
 
 .navbar {
@@ -292,7 +394,7 @@ a.btn-opcion {
 }
 
 a.btn-opcion:hover {
-    background-color: #587DA3;
+    background-color: #587DA3; /* Color por defecto, se sobrescribe por rol */
     transform: translateY(-2px);
     color: white;
 }

@@ -6,10 +6,7 @@ error_reporting(E_ALL); // Reporta todos los tipos de errores
 session_start();
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['id']) || $_SESSION['rol'] !== 'profesor') {
-    echo json_encode(['success' => false, 'message' => 'Acceso no autorizado.']);
-    exit();
-}
+
 
 require_once 'conexion.php';
 

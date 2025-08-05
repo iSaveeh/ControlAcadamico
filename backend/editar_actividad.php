@@ -2,15 +2,36 @@
 session_start();
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['id']) || $_SESSION['rol'] !== 'profesor') {
-    echo json_encode(['success' => false, 'message' => 'Acceso no autorizado.']);
-    exit();
-}
-
 require_once 'conexion.php';
 
 $response = ['success' => false, 'message' => ''];
 
+// Verifica que el usuario esté autenticado como profesor
+$usuario = $_SESSION['usuario'] ?? '';
+$rol = $_SESSION['rol'] ?? '';
+
+if ($rol !== 'profesor' || empty($usuario)) {
+    echo json_encode(['success' => false, 'message' => 'Acceso no autorizado.']);
+    exit();
+}
+
+// Obtener IDProfesor desde la tabla profesor usando el campo Usuario
+$id_profesor_logueado = null;
+$stmt = $conexion->prepare("SELECT Usuario FROM profesor WHERE Usuario = ?");
+$stmt->bind_param("s", $usuario);
+$stmt->execute();
+$stmt->bind_result($id_profesor);
+if ($stmt->fetch()) {
+    $id_profesor_logueado = $id_profesor;
+}
+$stmt->close();
+
+if ($id_profesor_logueado === null) {
+    echo json_encode(['success' => false, 'message' => 'No se pudo verificar el profesor.']);
+    exit();
+}
+
+// Validación del método POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idActividad = filter_var($_POST['idActividad'] ?? '', FILTER_VALIDATE_INT);
     $nombreActividad = trim($_POST['nombreActividad'] ?? '');
@@ -22,14 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $porcentaje_cleaned = str_replace(',', '.', $porcentaje_raw);
     $porcentaje = filter_var($porcentaje_cleaned, FILTER_VALIDATE_FLOAT);
 
-    $id_profesor_logueado = $_SESSION['id'];
-
-    if ($idActividad === false || empty($nombreActividad) || empty($descripcion) || $idAsignatura === false || empty($fecha) || $porcentaje === false || $porcentaje < 0 || $porcentaje > 100) {
+    // Validación de datos
+    if (
+        $idActividad === false || empty($nombreActividad) || empty($descripcion) ||
+        $idAsignatura === false || empty($fecha) ||
+        $porcentaje === false || $porcentaje < 0 || $porcentaje > 100
+    ) {
         $response['message'] = 'Por favor, complete todos los campos correctamente y asegúrese que el porcentaje esté entre 0 y 100.';
         echo json_encode($response);
         exit();
     }
 
+    // Actualizar la actividad (solo si el profesor es dueño de esa asignatura)
     try {
         $query = "
             UPDATE actividades AS act
@@ -51,21 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt->bind_param("isssdii", $idAsignatura, $nombreActividad, $descripcion, $fecha, $porcentaje, $idActividad, $id_profesor_logueado);
 
-        // Si la ejecución de la consulta fue exitosa (true)
         if ($stmt->execute()) {
-            // No importa si affected_rows es 0 o > 0, si la ejecución fue exitosa, la acción fue "exitosa"
-            // Solo si hubo un error de ejecución, entonces sí sería false.
             $response['success'] = true;
             $response['message'] = 'Actividad actualizada exitosamente.';
-            // Opcional: Si quieres un mensaje diferente para "sin cambios":
-            // if ($stmt->affected_rows === 0) {
-            //     $response['message'] = 'La actividad se guardó, pero no se detectaron cambios.';
-            // } else {
-            //     $response['message'] = 'Actividad actualizada exitosamente.';
-            // }
-
         } else {
-            // Solo aquí se debe considerar un error de la base de datos
             $response['message'] = 'Error al actualizar la actividad en la base de datos: ' . $stmt->error;
         }
 
@@ -80,4 +94,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 echo json_encode($response);
 exit();
-?>
